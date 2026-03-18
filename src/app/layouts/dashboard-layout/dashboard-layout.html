@@ -1,0 +1,23 @@
+<div class="dashboard-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <nav>
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Tổng quan</a
+      >
+      <a routerLink="/dashboard/profile" routerLinkActive="active">Thông tin cá nhân</a>
+      <a routerLink="/dashboard/orders" routerLinkActive="active">Lịch sử mua hàng</a>
+      <a routerLink="/dashboard/photos" routerLinkActive="active">Ảnh đã chọn</a>
+    </nav>
+    <button>Đăng xuất</button>
+  </aside>
+
+  <!-- Nội dung chính -->
+  <main class="content">
+    <router-outlet />
+    <!-- các trang con render ở đây -->
+  </main>
+</div>
