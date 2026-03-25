@@ -1,0 +1,105 @@
+<header class="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
+  <div class="flex h-16 items-center justify-between px-4 sm:px-6">
+    <div class="flex items-center gap-3">
+      <!-- Desktop collapse btn -->
+      <button
+        type="button"
+        class="hidden h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 lg:inline-flex"
+        (click)="toggleDesktopSidebar.emit()"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          class="h-5 w-5"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h10M4 18h16"></path>
+        </svg>
+      </button>
+      <!-- Mobile open btn -->
+      <button
+        type="button"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 lg:hidden"
+        (click)="toggleSidebar.emit()"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          class="h-5 w-5"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+      </button>
+      <!-- Search -->
+      <div
+        class="hidden items-center rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 sm:flex"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          class="mr-2 h-4 w-4 text-slate-400"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="m21 21-4.35-4.35m0 0A7 7 0 1 0 5.65 5.65a7 7 0 0 0 11 11Z"
+          ></path>
+        </svg>
+        <span class="text-xs text-slate-400">Search or type command...</span>
+        <span
+          class="ml-4 rounded border border-slate-200 bg-white px-2 py-0.5 text-[10px] text-slate-400"
+          >⌘K</span
+        >
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <!-- Notification -->
+      <button
+        type="button"
+        class="relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:bg-slate-50"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          class="h-5 w-5"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M14.857 17H9.143M18 8a6 6 0 1 0-12 0v4.286l-1.714 1.715A1 1 0 0 0 5 15.714h14a1 1 0 0 0 .714-1.713L18 12.286V8Z"
+          ></path>
+        </svg>
+        <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-rose-500"></span>
+      </button>
+      <!-- User -->
+      <div class="flex items-center gap-2 rounded-full border border-slate-200 bg-white p-1.5 pr-3">
+        <div
+          class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500 text-xs font-semibold text-white"
+        >
+          M
+        </div>
+        <div class="hidden text-right leading-tight sm:block">
+          <p class="text-xs font-semibold text-slate-700">Musharof</p>
+          <p class="text-[11px] text-slate-400">Admin</p>
+        </div>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          class="h-4 w-4 text-slate-400"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+</header>

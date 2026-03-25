@@ -1,10 +1,25 @@
 import { Component } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @Component({
   selector: 'app-dashboard-layout',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  standalone: true,
+  imports: [RouterOutlet, SidebarComponent, HeaderComponent],
   templateUrl: './dashboard-layout.html',
-  styleUrl: './dashboard-layout.scss',
 })
-export class DashboardLayoutComponent {}
+export class DashboardLayoutComponent {
+  isSidebarOpen = false;
+  isSidebarCollapsed = false;
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
+  closeSidebar() {
+    this.isSidebarOpen = false;
+  }
+  toggleDesktopSidebar() {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+  }
+}

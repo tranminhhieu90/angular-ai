@@ -1,0 +1,26 @@
+<section class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+  <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <h2 class="text-lg font-semibold text-slate-800">User Management</h2>
+    </div>
+
+    <button
+      type="button"
+      class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+      (click)="loadUsers()"
+    >
+      Reload
+    </button>
+  </div>
+
+  <p class="mb-3 text-sm text-rose-600" *ngIf="errorMessage()">{{ errorMessage() }}</p>
+
+  <div class="mb-3 text-sm text-slate-500" *ngIf="isLoading()">Đang tải dữ liệu users...</div>
+
+  <ag-grid-angular
+    class="ag-theme-alpine w-full"
+    [gridOptions]="gridOptions"
+    [rowData]="rowData()"
+    [style.height]="gridHeight"
+  />
+</section>

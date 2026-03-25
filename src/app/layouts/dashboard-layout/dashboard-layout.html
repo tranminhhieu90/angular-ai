@@ -1,23 +1,28 @@
-<div class="dashboard-wrapper">
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <nav>
-      <a
-        routerLink="/dashboard"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        >Tổng quan</a
-      >
-      <a routerLink="/dashboard/profile" routerLinkActive="active">Thông tin cá nhân</a>
-      <a routerLink="/dashboard/orders" routerLinkActive="active">Lịch sử mua hàng</a>
-      <a routerLink="/dashboard/photos" routerLinkActive="active">Ảnh đã chọn</a>
-    </nav>
-    <button>Đăng xuất</button>
-  </aside>
+<div class="flex min-h-screen bg-slate-100 text-slate-800">
+  <!-- Overlay mobile -->
+  <div
+    class="fixed inset-0 z-40 bg-slate-900/40 transition lg:hidden"
+    [class.pointer-events-none]="!isSidebarOpen"
+    [class.opacity-0]="!isSidebarOpen"
+    [class.opacity-100]="isSidebarOpen"
+    (click)="closeSidebar()"
+  ></div>
 
-  <!-- Nội dung chính -->
-  <main class="content">
-    <router-outlet />
-    <!-- các trang con render ở đây -->
-  </main>
+  <!-- Sidebar -->
+  <app-sidebar
+    [isOpen]="isSidebarOpen"
+    [isCollapsed]="isSidebarCollapsed"
+    (close)="closeSidebar()"
+  />
+
+  <!-- Main -->
+  <div class="flex min-w-0 flex-1 flex-col">
+    <app-dashboard-header
+      (toggleSidebar)="toggleSidebar()"
+      (toggleDesktopSidebar)="toggleDesktopSidebar()"
+    />
+    <main class="min-w-0 flex-1 p-4 sm:p-6">
+      <router-outlet />
+    </main>
+  </div>
 </div>
