@@ -7,7 +7,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service';
 import { AuthPageLayoutComponent } from '../../layouts/auth-page-layout/auth-page-layout.component';
 import { TuiButton, TuiIcon, TuiTextfield } from '@taiga-ui/core';
 import { TuiCheckbox } from '@taiga-ui/kit';
@@ -42,8 +41,6 @@ function strongPasswordValidator(control: AbstractControl): ValidationErrors | n
 })
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly authService = inject(AuthService);
-
   readonly isSubmitting = signal(false);
   readonly errorMessage = signal<string | null>(null);
   showPassword = false;
@@ -93,16 +90,16 @@ export class LoginComponent {
     this.isSubmitting.set(true);
     this.errorMessage.set(null);
 
-    this.authService.login(this.form.getRawValue()).subscribe({
-      next: () => {
-        this.isSubmitting.set(false);
-      },
-      error: (error) => {
-        const message = error?.error?.message || 'Đăng nhập thất bại. Vui lòng thử lại.';
-        this.errorMessage.set(message);
-        this.isSubmitting.set(false);
-      },
-    });
+    // this.authService.login(this.form.getRawValue()).subscribe({
+    //   next: () => {
+    //     this.isSubmitting.set(false);
+    //   },
+    //   error: (error) => {
+    //     const message = error?.error?.message || 'Đăng nhập thất bại. Vui lòng thử lại.';
+    //     this.errorMessage.set(message);
+    //     this.isSubmitting.set(false);
+    //   },
+    // });
   }
 
   togglePasswordVisibility(): void {

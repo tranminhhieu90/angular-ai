@@ -4,7 +4,6 @@ import { Component, OnInit, signal, ViewChild } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef } from 'ag-grid-community';
-import { UserDto } from '../../../core/api/users-api.service';
 
 @Component({
   selector: 'app-users',
@@ -17,9 +16,9 @@ export class UsersComponent implements OnInit {
 
   readonly isLoading = signal(false);
   readonly errorMessage = signal<string | null>(null);
-  readonly rowData = signal<UserDto[]>([]);
+  readonly rowData = signal<any[]>([]);
 
-  readonly columnDefs: ColDef<UserDto>[] = [
+  readonly columnDefs: ColDef<any>[] = [
     { field: 'id', headerName: 'ID', minWidth: 140, filter: true },
     { field: 'fullName', headerName: 'Full Name', minWidth: 180, filter: true },
     { field: 'email', headerName: 'Email', minWidth: 220, filter: true },
@@ -36,7 +35,7 @@ export class UsersComponent implements OnInit {
     this.loadUsers();
   }
 
-  readonly gridOptions: GridOptions<UserDto> = {
+  readonly gridOptions: GridOptions<any> = {
     columnDefs: this.columnDefs,
     defaultColDef: { sortable: true, filter: true, resizable: true, flex: 1 },
     pagination: false,
@@ -63,7 +62,7 @@ export class UsersComponent implements OnInit {
     return `${Math.min(calculated, maxHeight)}px`;
   }
 
-  private readonly mockUsers: UserDto[] = [
+  private readonly mockUsers: any[] = [
     {
       id: 'USR-001',
       fullName: 'Nguyen Van An',

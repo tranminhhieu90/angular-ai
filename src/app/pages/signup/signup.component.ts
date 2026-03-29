@@ -7,7 +7,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service';
 import { AuthPageLayoutComponent } from '../../layouts/auth-page-layout/auth-page-layout.component';
 import { TuiButton, TuiIcon, TuiTextfield } from '@taiga-ui/core';
 import { TuiCheckbox } from '@taiga-ui/kit';
@@ -42,7 +41,6 @@ function strongPasswordValidator(control: AbstractControl): ValidationErrors | n
 })
 export class SignupComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly authService = inject(AuthService);
 
   readonly isSubmitting = signal(false);
   readonly errorMessage = signal<string | null>(null);

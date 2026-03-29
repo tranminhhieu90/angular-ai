@@ -20,6 +20,14 @@ export const routes: Routes = [
     title: 'Đăng nhập | Angular AI Demo',
   },
   {
+    path: 'reset-password',
+    loadComponent: () =>
+      import('./pages/forgot-password/forgot-password.component').then(
+        (m) => m.ForgotPasswordComponent,
+      ),
+    title: 'Reset passowrd | Angular AI Demo',
+  },
+  {
     path: 'dashboard',
     // canActivate: [authGuard],
     loadComponent: () =>
