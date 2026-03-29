@@ -1,6 +1,113 @@
 <app-auth-page-layout>
-  <button appearance="outline" iconEnd="@tui.chevron-down" size="s" tuiButton type="button">
-    More
-  </button>
-  <button appearance="primary" tuiButton type="button">Primary</button>
+  <div class="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
+    <div>
+      <div class="mb-5 sm:mb-8">
+        <h1 class="mb-2 text-3xl font-semibold">Sign In</h1>
+        <p class="text-sm">Enter your email and password to sign in!</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+        <!-- Email -->
+        <div>
+          <label tuiLabel>
+            <div class="flex items-baseline text-white">
+              Email <span class="text-red-500 ml-1">*</span>
+            </div>
+            <tui-textfield tuiTextfieldSize="m">
+              <input
+                tuiTextfield
+                type="email"
+                formControlName="email"
+                placeholder="info@gmail.com"
+              />
+            </tui-textfield>
+          </label>
+          @if (emailError) {
+            <p class="mt-1 text-sm text-red-400">{{ emailError }}</p>
+          }
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label tuiLabel>
+            <div class="flex items-baseline text-white">
+              Password <span class="text-red-500 ml-1">*</span>
+            </div>
+            <tui-textfield tuiTextfieldSize="m">
+              <input
+                tuiTextfield
+                [attr.type]="showPassword ? 'text' : 'password'"
+                formControlName="password"
+                placeholder="Nhập mật khẩu"
+              />
+              <tui-icon
+                [icon]="showPassword ? '@tui.eye-off' : '@tui.eye'"
+                (click)="togglePasswordVisibility()"
+                style="cursor: pointer"
+              />
+            </tui-textfield>
+          </label>
+          @if (passwordError) {
+            <p class="mt-1 text-sm text-red-400">{{ passwordError }}</p>
+          }
+        </div>
+
+        <!-- Remember me & Forgot password -->
+        <div class="flex items-center justify-between">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input
+              style="--tui-border-normal: white"
+              tuiCheckbox
+              type="checkbox"
+              formControlName="rememberMe"
+            />
+            <span class="text-sm">Keep me logged in</span>
+          </label>
+          <a routerLink="/reset-password" class="text-sm text-brand-500 hover:text-brand-600">
+            Forgot password?
+          </a>
+        </div>
+
+        <!-- API error -->
+        @if (errorMessage()) {
+          <div
+            class="px-4 py-3 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg"
+          >
+            {{ errorMessage() }}
+          </div>
+        }
+
+        <!-- Submit -->
+        <button tuiButton type="submit" size="m" class="w-full" [disabled]="isSubmitting()">
+          Sign in
+        </button>
+
+        <!-- Divider -->
+        <div class="relative flex items-center gap-3">
+          <div class="flex-1 h-px bg-white/10"></div>
+          <span class="text-xs text-white/40">Or</span>
+          <div class="flex-1 h-px bg-white/10"></div>
+        </div>
+
+        <!-- Google Sign In -->
+        <button
+          tuiButton
+          type="button"
+          size="m"
+          appearance="glass"
+          class="inline-flex items-center justify-center w-full gap-3 py-3 text-brand-500"
+        >
+          <app-icon-google [size]="36" />
+          Sign in with Google
+        </button>
+      </form>
+
+      <div class="mt-5">
+        <p class="text-sm font-normal text-center sm:text-start">
+          Don't have an account?
+          <a routerLink="/signup" class="text-brand-500 hover:text-brand-600">Sign Up</a>
+        </p>
+      </div>
+    </div>
+  </div>
 </app-auth-page-layout>

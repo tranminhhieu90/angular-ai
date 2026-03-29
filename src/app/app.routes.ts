@@ -1,4 +1,5 @@
 // app.routes.ts
+// app.routes.ts
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 
@@ -7,6 +8,11 @@ export const routes: Routes = [
     path: '', // Khi vào "/"
     redirectTo: 'dashboard',
     pathMatch: 'full',
+  },
+  {
+    path: 'signup',
+    loadComponent: () => import('./pages/signup/signup.component').then((m) => m.SignupComponent),
+    title: 'Đăng ký | Angular AI Demo',
   },
   {
     path: 'login', // /login

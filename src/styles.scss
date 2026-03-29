@@ -1,36 +1,59 @@
+/* Sau */
+@use 'tailwindcss';
 @import 'ag-grid-community/styles/ag-theme-quartz.min.css';
 
 :root {
   // ===== PRIMARY BUTTON COLOR =====
-  --tui-background-accent-1: #f19763; // màu nền button primary
-  --tui-background-accent-1-hover: #4f46e5; // khi hover
-  --tui-background-accent-1-pressed: #4338ca; // khi click
+  // --tui-background-accent-1: #f19763; // màu nền button primary
+  // --tui-background-accent-2-hover: #ff9a94;
+  // --tui-background-accent-2-pressed: #e7716a;
 
   // ===== SECONDARY BUTTON COLOR =====
-  --tui-background-accent-2: #ff7043; // màu accent thứ 2
-  --tui-background-accent-2-hover: #ff9a94;
-  --tui-background-accent-2-pressed: #e7716a;
+  // --tui-background-accent-2: red; // màu accent thứ 2
+  // --tui-background-accent-2-hover: #ff9a94;
+  // --tui-background-accent-2-pressed: #e7716a;
 
   // ===== TEXT =====
-  --tui-text-primary: rgba(27, 31, 59, 1); // màu chữ chính
-  --tui-text-secondary: rgba(27, 31, 59, 0.65); // màu chữ phụ
-  --tui-text-primary-on-accent-1: #ffffff; // chữ trên nền primary button
+  // --tui-text-primary: rgba(255, 255, 255, 0.9); /* Chữ trắng 90% */
+  // --tui-text-secondary: rgba(27, 31, 59, 0.65); // màu chữ phụ
+  // --tui-text-primary-on-accent-1: #ffffff; // chữ trên nền primary button
 
   // ===== BORDER =====
-  --tui-border-normal: rgba(0, 0, 0, 0.1);
-  --tui-border-focus: rgba(99, 102, 241, 0.64); // border khi focus, nên cùng màu primary
+  // --tui-border-normal: rgba(201, 195, 195, 0.4);
+
+  // ===== BORDER KHI HOVER =====
+  // --tui-border-hover: rgba(201, 195, 195, 0.7);
+
+  // ===== BORDER KHI CLICK/FOCUS =====
+  // Nên dùng màu Primary (Cam #f19763) để đồng bộ với nút bấm của bạn
+  // --tui-border-focus: #f19763;
 
   // ===== BACKGROUND =====
-  --tui-background-base: #ffffff;
-  --tui-background-base-alt: #f6f6f6;
+  // --tui-background-base: #ffffff;
+  // --tui-background-base-alt: #f6f6f6;
 
   // ===== STATUS COLORS =====
-  --tui-status-positive: rgba(74, 201, 155, 1); // success
-  --tui-status-negative: rgba(244, 87, 37, 1); // error
-  --tui-status-warning: rgba(255, 199, 0, 1); // warning
-  --tui-status-info: rgba(112, 182, 246, 1); // info
+  // --tui-status-positive: rgba(74, 201, 155, 1); // success
+  // --tui-status-negative: rgba(244, 87, 37, 1); // error
+  // --tui-status-warning: rgba(255, 199, 0, 1); // warning
+  // --tui-status-info: rgba(112, 182, 246, 1); // info
 
   // ===== RADIUS =====
-  --tui-radius-m: 0.625rem;
-  --tui-radius-l: 0.75rem;
+  // --tui-radius-m: 0.625rem;
+  // --tui-radius-l: 0.75rem;
+}
+
+[tuiTheme='dark'],
+.dark {
+  // --tui-text-primary: rgba(255, 255, 255, 0.9); /* Chữ trắng 90% */
+  // --tui-text-secondary: rgba(255, 255, 255, 0.6); /* Chữ trắng mờ hơn */
+  // --tui-background-base: #0f172a; /* Nền tối (Slate 900) */
+
+  // /* Border cũng cần sáng lên một chút để thấy khung Input */
+  // --tui-border-normal: rgba(255, 255, 255, 0.1);
+}
+
+@theme {
+  --color-brand-500: #7592ff;
+  --color-brand-600: #7592ff;
 }
