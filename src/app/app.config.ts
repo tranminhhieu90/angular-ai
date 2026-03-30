@@ -1,5 +1,6 @@
 import { provideEventPlugins } from '@taiga-ui/event-plugins';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideToastr } from 'ngx-toastr';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import {
   ApplicationConfig,
@@ -12,6 +13,9 @@ import { authInterceptor } from './core/interceptors/auth.interceptor';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),
+    provideToastr({
+      preventDuplicates: true,
+    }),
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideHttpClient(withInterceptors([authInterceptor])),

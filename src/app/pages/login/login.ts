@@ -11,6 +11,7 @@ import { AuthPageLayoutComponent } from '../../layouts/auth-page-layout/auth-pag
 import { TuiButton, TuiIcon, TuiTextfield } from '@taiga-ui/core';
 import { TuiCheckbox } from '@taiga-ui/kit';
 import { GoogleIconComponent } from '../../shared/components/icons/google-icon.component';
+import { ToastService } from '../../core/services/toast.service';
 
 function strongPasswordValidator(control: AbstractControl): ValidationErrors | null {
   const value: string = control.value || '';
@@ -44,6 +45,7 @@ export class LoginComponent {
   readonly isSubmitting = signal(false);
   readonly errorMessage = signal<string | null>(null);
   showPassword = false;
+  private toast = inject(ToastService);
 
   readonly form = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
@@ -100,6 +102,22 @@ export class LoginComponent {
     //     this.isSubmitting.set(false);
     //   },
     // });
+
+    this.toast.success('Lưu dữ liệu thành công!', 'Thành công', {
+      positionClass: 'toast-top-right',
+    });
+
+    this.toast.error('Đăng nhập thất bại. Vui lòng thử lại.', 'Lỗi', {
+      positionClass: 'toast-top-left',
+    });
+
+    this.toast.warning('Bạn chưa điền đầy đủ thông tin.', 'Cảnh báo', {
+      positionClass: 'toast-bottom-right',
+    });
+
+    this.toast.info('Phiên làm việc sắp hết hạn.', 'Thông tin', {
+      positionClass: 'toast-bottom-left',
+    });
   }
 
   togglePasswordVisibility(): void {
