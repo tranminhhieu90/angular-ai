@@ -10,7 +10,7 @@ import { RouterLink } from '@angular/router';
 import { AuthPageLayoutComponent } from '../../layouts/auth-page-layout/auth-page-layout.component';
 import { TuiButton, TuiIcon, TuiTextfield } from '@taiga-ui/core';
 import { TuiCheckbox } from '@taiga-ui/kit';
-import { GoogleIconComponent } from '../../shared/icons/google-icon.component';
+import { GoogleIconComponent } from '../../shared/components/icons/google-icon.component';
 
 function strongPasswordValidator(control: AbstractControl): ValidationErrors | null {
   const value: string = control.value || '';
@@ -87,7 +87,7 @@ export class LoginComponent {
     }
 
     console.log('Form Data:', this.form.getRawValue());
-    this.isSubmitting.set(true);
+    // this.isSubmitting.set(true);
     this.errorMessage.set(null);
 
     // this.authService.login(this.form.getRawValue()).subscribe({

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { GridShapeComponent } from '../../shared/grid-shape/grid-shape.component';
+import { GridShapeComponent } from '../../shared/components/grid-shape/grid-shape.component';
 
 @Component({
   selector: 'app-auth-page-layout',
