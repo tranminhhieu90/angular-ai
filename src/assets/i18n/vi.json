@@ -1,0 +1,13 @@
+{
+  "users": {
+    "columns": {
+      "id": "ID",
+      "fullName": "Họ Tên",
+      "email": "Email",
+      "role": "Vai Trò",
+      "avatar": "Hình Đại Diện"
+    },
+    "avatarAvailable": "Có sẵn",
+    "avatarNone": "Không có"
+  }
+}

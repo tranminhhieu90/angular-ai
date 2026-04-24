@@ -1,0 +1,16 @@
+{
+  "users": {
+    "title": "User Management",
+    "reload": "Reload",
+    "loading": "Loading users data...",
+    "columns": {
+      "id": "ID",
+      "fullName": "Full Name",
+      "email": "Email",
+      "role": "Role",
+      "avatar": "Avatar"
+    },
+    "avatarAvailable": "Available",
+    "avatarNone": "No avatar"
+  }
+}

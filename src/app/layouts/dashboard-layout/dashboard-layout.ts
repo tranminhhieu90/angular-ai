@@ -5,7 +5,7 @@ import { HeaderComponent } from './components/header/header.component';
 
 @Component({
   selector: 'app-dashboard-layout',
-  standalone: true,
+  // standalone: true,
   imports: [RouterOutlet, SidebarComponent, HeaderComponent],
   templateUrl: './dashboard-layout.html',
 })

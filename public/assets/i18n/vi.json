@@ -1,0 +1,16 @@
+{
+  "users": {
+    "title": "Quản lý người dùng",
+    "reload": "Tải lại",
+    "loading": "Đang tải dữ liệu users...",
+    "columns": {
+      "id": "Mã",
+      "fullName": "Họ và tên",
+      "email": "Email",
+      "role": "Vai trò",
+      "avatar": "Ảnh đại diện"
+    },
+    "avatarAvailable": "Có ảnh",
+    "avatarNone": "Không có ảnh"
+  }
+}
