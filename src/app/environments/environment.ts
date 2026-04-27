@@ -1,8 +1,9 @@
 export const environment = {
   production: false,
   services: {
-    auth: 'http://localhost:3001/api',
-    user: 'http://localhost:3002/api',
+    base: 'http://localhost:3000',
+    auth: 'http://localhost:3001',
+    user: 'http://localhost:3001/api',
     product: 'http://localhost:3003/api',
     order: 'http://localhost:3004/api',
     payment: 'http://localhost:3005/api',

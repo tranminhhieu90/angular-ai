@@ -6,11 +6,12 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthPageLayoutComponent } from '../../layouts/auth-page-layout/auth-page-layout.component';
 import { TuiButton, TuiIcon, TuiTextfield } from '@taiga-ui/core';
-import { TuiCheckbox } from '@taiga-ui/kit';
+import { TuiCheckbox, TuiChevron, TuiDataListWrapper, TuiSelect } from '@taiga-ui/kit';
 import { GoogleIconComponent } from '../../shared/components/icons/google-icon.component';
+import { AuthService } from '../../core/api/auth.service';
 
 function strongPasswordValidator(control: AbstractControl): ValidationErrors | null {
   const value: string = control.value || '';
@@ -35,13 +36,18 @@ function strongPasswordValidator(control: AbstractControl): ValidationErrors | n
     TuiTextfield,
     TuiCheckbox,
     GoogleIconComponent,
+    TuiChevron,
+    TuiDataListWrapper,
+    TuiSelect,
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss',
 })
 export class SignupComponent {
   private readonly fb = inject(FormBuilder);
-
+  protected readonly roles = ['admin', 'user'];
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
   readonly isSubmitting = signal(false);
   readonly errorMessage = signal<string | null>(null);
   showPassword = false;
@@ -55,6 +61,7 @@ export class SignupComponent {
       password: ['', [Validators.required, Validators.minLength(8), strongPasswordValidator]],
       confirmPassword: ['', Validators.required],
       agreeToTerms: [false, Validators.requiredTrue],
+      role: [''],
     },
     { validators: confirmPasswordValidator },
   );
@@ -119,19 +126,28 @@ export class SignupComponent {
       return;
     }
 
+    console.log(this.form.getRawValue());
+    const formValue = this.form.getRawValue();
     this.isSubmitting.set(true);
     this.errorMessage.set(null);
 
-    // this.authService.register(this.form.getRawValue()).subscribe({
-    //   next: () => {
-    //     this.isSubmitting.set(false);
-    //   },
-    //   error: (error) => {
-    //     const message = error?.error?.message || 'Đăng ký thất bại. Vui lòng thử lại.';
-    //     this.errorMessage.set(message);
-    //     this.isSubmitting.set(false);
-    //   },
-    // });
+    const data = {
+      role: formValue.role,
+      userName: formValue.firstName + formValue.lastName,
+      email: formValue.email,
+      password: formValue.password,
+    };
+    this.authService.register(data).subscribe({
+      next: () => {
+        this.isSubmitting.set(false);
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        const message = error?.error?.message || 'Đăng ký thất bại. Vui lòng thử lại.';
+        this.errorMessage.set(message);
+        this.isSubmitting.set(false);
+      },
+    });
   }
 
   togglePasswordVisibility(): void {

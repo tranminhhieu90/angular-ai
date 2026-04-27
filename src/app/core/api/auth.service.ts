@@ -13,10 +13,10 @@ export interface LoginPayload {
 }
 
 export interface RegisterPayload {
-  firstName: string;
-  lastName: string;
+  userName: string;
   email: string;
   password: string;
+  role: string;
 }
 
 export interface AuthResponse {
@@ -53,6 +53,10 @@ export class AuthService extends BaseApiService {
   private readonly router = inject(Router);
   protected override readonly serviceName = 'auth' as const;
 
+  constructor() {
+    super();
+    console.log('AuthService initialized', this.serviceName);
+  }
   // State
   private readonly _currentUser = signal<UserProfile | null>(this.getUserFromStorage());
 

@@ -107,7 +107,15 @@
             <p class="mt-1 text-sm text-red-400">{{ confirmPasswordError }}</p>
           }
         </div>
-
+        <label tuiLabel>
+          <div class="flex items-baseline text-white">
+            Role <span class="text-red-500 ml-1">*</span>
+          </div>
+          <tui-textfield tuiChevron tuiTextfieldSize="m" [tuiTextfieldCleaner]="false">
+            <input placeholder="Select role" tuiSelect formControlName="role" />
+            <tui-data-list-wrapper *tuiTextfieldDropdown new [items]="roles" />
+          </tui-textfield>
+        </label>
         <!-- Agree to Terms -->
         <div class="flex items-start gap-3">
           <input

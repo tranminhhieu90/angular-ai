@@ -4,12 +4,11 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { ApiConfigService } from './api-config.service';
 
-@Injectable() // ← bỏ providedIn vì sẽ được extend
+@Injectable()
 export class BaseApiService {
   protected readonly http = inject(HttpClient);
   private readonly apiConfig = inject(ApiConfigService);
 
-  // Child service khai báo service name
   protected readonly serviceName!: Parameters<ApiConfigService['getUrl']>[0];
 
   protected get baseUrl(): string {

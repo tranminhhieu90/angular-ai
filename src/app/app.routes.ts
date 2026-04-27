@@ -29,7 +29,7 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    // canActivate: [authGuard],
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./layouts/dashboard-layout/dashboard-layout').then((m) => m.DashboardLayoutComponent),
     title: 'Dashboard | Angular AI Demo',
