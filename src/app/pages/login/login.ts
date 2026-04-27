@@ -6,23 +6,17 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthPageLayoutComponent } from '../../layouts/auth-page-layout/auth-page-layout.component';
 import { TuiButton, TuiIcon, TuiTextfield } from '@taiga-ui/core';
 import { TuiCheckbox } from '@taiga-ui/kit';
 import { GoogleIconComponent } from '../../shared/components/icons/google-icon.component';
 import { ToastService } from '../../core/services/toast.service';
+import { AuthService } from '../../core/api/auth.service';
 
 function strongPasswordValidator(control: AbstractControl): ValidationErrors | null {
-  const value: string = control.value || '';
-  const errors: ValidationErrors = {};
-
-  // if (!/[A-Z]/.test(value)) errors['noUppercase'] = true;
-  // if (!/[a-z]/.test(value)) errors['noLowercase'] = true;
-  // if (!/[0-9]/.test(value)) errors['noNumber'] = true;
-  // if (!/[!@#$%^&*()_+\-=\[\]{}]/.test(value)) errors['noSpecial'] = true;
-
-  return Object.keys(errors).length > 0 ? errors : null;
+  // Validator hiện tại không yêu cầu gì, có thể mở rộng sau
+  return null;
 }
 
 @Component({
@@ -42,10 +36,12 @@ function strongPasswordValidator(control: AbstractControl): ValidationErrors | n
 })
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly toast = inject(ToastService);
   readonly isSubmitting = signal(false);
   readonly errorMessage = signal<string | null>(null);
   showPassword = false;
-  private toast = inject(ToastService);
 
   readonly form = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
@@ -88,35 +84,25 @@ export class LoginComponent {
       return;
     }
 
-    console.log('Form Data:', this.form.getRawValue());
-    // this.isSubmitting.set(true);
+    this.isSubmitting.set(true);
     this.errorMessage.set(null);
 
-    // this.authService.login(this.form.getRawValue()).subscribe({
-    //   next: () => {
-    //     this.isSubmitting.set(false);
-    //   },
-    //   error: (error) => {
-    //     const message = error?.error?.message || 'Đăng nhập thất bại. Vui lòng thử lại.';
-    //     this.errorMessage.set(message);
-    //     this.isSubmitting.set(false);
-    //   },
-    // });
-
-    this.toast.success('Lưu dữ liệu thành công!', 'Thành công', {
-      positionClass: 'toast-top-right',
-    });
-
-    this.toast.error('Đăng nhập thất bại. Vui lòng thử lại.', 'Lỗi', {
-      positionClass: 'toast-top-left',
-    });
-
-    this.toast.warning('Bạn chưa điền đầy đủ thông tin.', 'Cảnh báo', {
-      positionClass: 'toast-bottom-right',
-    });
-
-    this.toast.info('Phiên làm việc sắp hết hạn.', 'Thông tin', {
-      positionClass: 'toast-bottom-left',
+    this.authService.login(this.form.getRawValue()).subscribe({
+      next: () => {
+        this.isSubmitting.set(false);
+        this.toast.success('Đăng nhập thành công!', 'Thành công', {
+          positionClass: 'toast-top-right',
+        });
+        this.router.navigate(['/dashboard']);
+      },
+      error: (error) => {
+        this.isSubmitting.set(false);
+        const message = error?.error?.message || 'Đăng nhập thất bại. Vui lòng thử lại.';
+        this.errorMessage.set(message);
+        this.toast.error(message, 'Lỗi', {
+          positionClass: 'toast-top-right',
+        });
+      },
     });
   }
 

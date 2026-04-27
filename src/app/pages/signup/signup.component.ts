@@ -18,9 +18,6 @@ function strongPasswordValidator(control: AbstractControl): ValidationErrors | n
   const errors: ValidationErrors = {};
 
   if (!/[A-Z]/.test(value)) errors['noUppercase'] = true;
-  //   if (!/[a-z]/.test(value)) errors['noLowercase'] = true;
-  //   if (!/[0-9]/.test(value)) errors['noNumber'] = true;
-  //   if (!/[!@#$%^&*()_+\-=\[\]{}]/.test(value)) errors['noSpecial'] = true;
 
   return Object.keys(errors).length > 0 ? errors : null;
 }
