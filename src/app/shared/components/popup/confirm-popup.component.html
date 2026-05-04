@@ -1,0 +1,23 @@
+<app-popup-shell [title]="data.title" [showClose]="true" (closed)="close(false)">
+  <p class="app-confirm-popup__message" *ngIf="data.message">{{ data.message }}</p>
+
+  <footer class="app-confirm-popup__actions">
+    <button
+      *ngIf="!data.hideCancel"
+      type="button"
+      class="app-confirm-popup__button app-confirm-popup__button--secondary"
+      (click)="close(false)"
+    >
+      {{ cancelText() }}
+    </button>
+
+    <button
+      type="button"
+      class="app-confirm-popup__button app-confirm-popup__button--primary"
+      [ngClass]="'app-confirm-popup__button--' + variant()"
+      (click)="close(true)"
+    >
+      {{ confirmText() }}
+    </button>
+  </footer>
+</app-popup-shell>

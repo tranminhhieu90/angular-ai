@@ -6,13 +6,14 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef, GridApi, GridOptions, GridReadyEvent } from 'ag-grid-community';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
-// ✅ Define strong type for data model
+import { UserService, UserDto } from '@/app/core/api/user.service';
+
 interface User {
-  id: string;
-  fullName: string;
+  id: number;
+  userName: string;
   email: string;
   role: string;
-  avatarUrl?: string;
+  isEmailConfirmed: boolean;
 }
 
 @Component({
@@ -23,6 +24,7 @@ interface User {
 })
 export class UsersComponent implements OnInit, OnDestroy {
   private readonly translocoService = inject(TranslocoService);
+  private readonly userService = inject(UserService);
   private readonly destroy$ = new Subject<void>();
   private gridApi!: GridApi<User>;
 
@@ -30,13 +32,11 @@ export class UsersComponent implements OnInit, OnDestroy {
   readonly errorMessage = signal<string | null>(null);
   readonly rowData = signal<User[]>([]);
 
-  // ✅ columnDefs is mutable — rebuilt on language change
   columnDefs: ColDef<User>[] = [];
 
-  // ✅ gridOptions chỉ chứa config tĩnh (không phụ thuộc i18n)
   readonly gridOptions: GridOptions<User> = {
     domLayout: 'autoHeight',
-    defaultColDef: { sortable: true, filter: true, resizable: true, flex: 1 },
+    defaultColDef: { sortable: true, resizable: true, flex: 1 },
     pagination: false,
     animateRows: true,
     rowSelection: {
@@ -44,28 +44,29 @@ export class UsersComponent implements OnInit, OnDestroy {
       checkboxes: true,
       headerCheckbox: true,
     },
-    // rowHeight: 48,
     onGridReady: (event: GridReadyEvent<User>) => {
       this.gridApi = event.api;
     },
   };
 
   ngOnInit(): void {
+    let isFirstLoad = true;
+
     this.translocoService
-      .selectTranslation() // ← emit khi translation sẵn sàng
-      .pipe(take(1), takeUntil(this.destroy$))
+      .selectTranslation()
+      .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.columnDefs = this.buildColumnDefs();
-        this.loadUsers();
-      });
 
-    // 3. Listen for language changes → rebuild columnDefs
-    this.translocoService.langChanges$.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      this.columnDefs = this.buildColumnDefs();
-      if (this.gridApi) {
-        this.gridApi.setGridOption('columnDefs', this.columnDefs);
-      }
-    });
+        if (this.gridApi) {
+          this.gridApi.setGridOption('columnDefs', this.columnDefs);
+        }
+
+        if (isFirstLoad) {
+          this.loadUsers();
+          isFirstLoad = false;
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -73,10 +74,6 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  /**
-   * Build columnDefs using translated headerNames.
-   * Called once in ngOnInit + on every language change.
-   */
   private buildColumnDefs(): ColDef<User>[] {
     const t = (key: string) => this.translocoService.translate(key);
 
@@ -84,139 +81,55 @@ export class UsersComponent implements OnInit, OnDestroy {
       {
         field: 'id',
         headerName: t('users.columns.id'),
-        minWidth: 140,
-        filter: true,
+        minWidth: 80,
       },
       {
-        field: 'fullName',
-        headerName: t('users.columns.fullName'),
-        minWidth: 180,
-        filter: true,
-        wrapText: true,
-        autoHeight: true,
-        cellStyle: { 'white-space': 'wrap', 'line-height': '1.5' },
+        field: 'userName',
+        headerName: t('users.columns.full_name'),
+        minWidth: 160,
       },
       {
         field: 'email',
         headerName: t('users.columns.email'),
         minWidth: 220,
-        filter: true,
       },
       {
         field: 'role',
         headerName: t('users.columns.role'),
         minWidth: 120,
-        filter: true,
       },
       {
-        field: 'avatarUrl',
-        headerName: t('users.columns.avatar'),
-        minWidth: 180,
-        valueFormatter: (params) =>
-          params.value ? t('users.avatarAvailable') : t('users.avatarNone'),
+        field: 'isEmailConfirmed',
+        headerName: t('users.columns.is_email_confirmed'),
+        minWidth: 160,
+        valueFormatter: (params) => (params.value ? t('users.confirmed') : t('users.notConfirmed')),
       },
     ];
   }
 
-  loadUsers(): void {
+  loadUsers(page = 1, limit = 20): void {
     this.isLoading.set(true);
-    // Simulate API call — replace with real HTTP call later
-    this.rowData.set(this.mockUsers);
-    this.isLoading.set(false);
-  }
+    this.errorMessage.set(null);
 
-  private readonly mockUsers: User[] = [
-    {
-      id: 'USR-001',
-      fullName:
-        'Nguyen Van An 222222222222222222222222222222222222222222222222222 2 22222222233333333333333',
-      email: 'an.nguyen@example.com',
-      role: 'admin',
-      avatarUrl: 'https://i.pravatar.cc/120?img=1',
-    },
-    {
-      id: 'USR-002',
-      fullName:
-        'Tran Thi Bich Nguyen Van An 222222222222222222222222222222222222222222222222222 2 22222222233333333333333Nguyen Van An 222222222222222222222222222222222222222222222222222 2 22222222233333333333333',
-      email: 'bich.tran@example.com',
-      role: 'staff',
-      avatarUrl: 'https://i.pravatar.cc/120?img=2',
-    },
-    {
-      id: 'USR-003',
-      fullName: 'Le Quoc Minh',
-      email: 'minh.le@example.com',
-      role: 'customer',
-    },
-    {
-      id: 'USR-004',
-      fullName: 'Pham Gia Huy',
-      email: 'huy.pham@example.com',
-      role: 'staff',
-      avatarUrl: 'https://i.pravatar.cc/120?img=4',
-    },
-    {
-      id: 'USR-005',
-      fullName: 'Do Thu Trang',
-      email: 'trang.do@example.com',
-      role: 'customer',
-    },
-    {
-      id: 'USR-006',
-      fullName: 'Le Quoc Minh',
-      email: 'minh.le@example.com',
-      role: 'customer',
-    },
-    {
-      id: 'USR-007',
-      fullName: 'Pham Gia Huy',
-      email: 'huy.pham@example.com',
-      role: 'staff',
-      avatarUrl: 'https://i.pravatar.cc/120?img=4',
-    },
-    {
-      id: 'USR-008',
-      fullName: 'Do Thu Trang',
-      email: 'trang.do@example.com',
-      role: 'customer',
-    },
-    {
-      id: 'USR-009',
-      fullName: 'Le Quoc Minh',
-      email: 'minh.le@example.com',
-      role: 'customer',
-    },
-    {
-      id: 'USR-010',
-      fullName: 'Pham Gia Huy',
-      email: 'huy.pham@example.com',
-      role: 'staff',
-      avatarUrl: 'https://i.pravatar.cc/120?img=4',
-    },
-    {
-      id: 'USR-011',
-      fullName: 'Do Thu Trang',
-      email: 'trang.do@example.com',
-      role: 'customer',
-    },
-    {
-      id: 'USR-012',
-      fullName: 'Le Quoc Minh',
-      email: 'minh.le@example.com',
-      role: 'customer',
-    },
-    {
-      id: 'USR-013',
-      fullName: 'Pham Gia Huy',
-      email: 'huy.pham@example.com',
-      role: 'staff',
-      avatarUrl: 'https://i.pravatar.cc/120?img=4',
-    },
-    {
-      id: 'USR-014',
-      fullName: 'Do Thu Trang',
-      email: 'trang.do@example.com',
-      role: 'customer',
-    },
-  ];
+    this.userService
+      .getUsers({ page, limit })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          const mapped: User[] = res.data.map((dto: UserDto) => ({
+            id: dto.id,
+            userName: dto.userName,
+            email: dto.email,
+            role: dto.role,
+            isEmailConfirmed: dto.isEmailConfirmed,
+          }));
+          this.rowData.set(mapped);
+          this.isLoading.set(false);
+        },
+        error: (err) => {
+          this.errorMessage.set(err?.message ?? 'Không thể tải danh sách user.');
+          this.isLoading.set(false);
+        },
+      });
+  }
 }

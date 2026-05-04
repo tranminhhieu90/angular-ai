@@ -1,0 +1,22 @@
+<section class="app-popup-shell" role="document">
+  <header class="app-popup-shell__header" *ngIf="title || showClose">
+    <div class="app-popup-shell__heading">
+      <h2 class="app-popup-shell__title" *ngIf="title">{{ title }}</h2>
+      <p class="app-popup-shell__description" *ngIf="description">{{ description }}</p>
+    </div>
+
+    <button
+      *ngIf="showClose"
+      type="button"
+      class="app-popup-shell__close"
+      aria-label="Đóng popup"
+      (click)="close()"
+    >
+      ×
+    </button>
+  </header>
+
+  <div class="app-popup-shell__content">
+    <ng-content />
+  </div>
+</section>

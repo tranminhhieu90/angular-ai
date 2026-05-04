@@ -1,0 +1,70 @@
+.app-confirm-popup__message {
+  margin: 0;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.app-confirm-popup__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.app-confirm-popup__button {
+  min-width: 92px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.app-confirm-popup__button--secondary {
+  border-color: #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+}
+
+.app-confirm-popup__button--secondary:hover {
+  background: #f8fafc;
+}
+
+.app-confirm-popup__button--primary {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.app-confirm-popup__button--primary:hover {
+  filter: brightness(0.96);
+}
+
+.app-confirm-popup__button--danger {
+  background: #dc2626;
+}
+
+.app-confirm-popup__button--success {
+  background: #16a34a;
+}
+
+.app-confirm-popup__button--warning {
+  background: #d97706;
+}
+
+.app-confirm-popup__button--info {
+  background: #0284c7;
+}
+
+@media (max-width: 480px) {
+  .app-confirm-popup__actions {
+    flex-direction: column-reverse;
+  }
+
+  .app-confirm-popup__button {
+    width: 100%;
+  }
+}

@@ -1,16 +1,17 @@
 {
   "users": {
-    "title": "User Management",
-    "reload": "Reload",
-    "loading": "Loading users data...",
+    "title": "Quản lý người dùng",
+    "reload": "Tải lại",
+    "loading": "Đang tải dữ liệu users...",
     "columns": {
-      "id": "ID",
-      "fullName": "Full Name",
+      "id": "Mã",
+      "full_name": "Họ và tên",
       "email": "Email",
-      "role": "Role",
-      "avatar": "Avatar"
+      "role": "Vai trò",
+      "avatar": "Ảnh đại diện",
+      "is_email_confirmed": "Ảnh đại diện"
     },
-    "avatarAvailable": "Available",
-    "avatarNone": "No avatar"
+    "avatarAvailable": "Có ảnh",
+    "avatarNone": "Không có ảnh"
   }
 }

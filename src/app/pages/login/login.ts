@@ -7,12 +7,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthPageLayoutComponent } from '../../layouts/auth-page-layout/auth-page-layout.component';
+import { AuthPageLayoutComponent } from '@/app/layouts/auth-page-layout/auth-page-layout.component';
 import { TuiButton, TuiIcon, TuiTextfield } from '@taiga-ui/core';
 import { TuiCheckbox } from '@taiga-ui/kit';
-import { GoogleIconComponent } from '../../shared/components/icons/google-icon.component';
-import { ToastService } from '../../core/services/toast.service';
-import { AuthService } from '../../core/api/auth.service';
+import { GoogleIconComponent } from '@/app/shared/components/icons/google-icon.component';
+import { ToastService } from '@/app/core/services/toast.service';
+import { AuthService } from '@/app/core/api/auth.service';
 
 function strongPasswordValidator(control: AbstractControl): ValidationErrors | null {
   // Validator hiện tại không yêu cầu gì, có thể mở rộng sau
@@ -86,8 +86,12 @@ export class LoginComponent {
 
     this.isSubmitting.set(true);
     this.errorMessage.set(null);
-
-    this.authService.login(this.form.getRawValue()).subscribe({
+    const formValue = this.form.getRawValue();
+    const payload = {
+      email: formValue.email,
+      password: formValue.password,
+    };
+    this.authService.login(payload, formValue.rememberMe).subscribe({
       next: () => {
         this.isSubmitting.set(false);
         this.toast.success('Đăng nhập thành công!', 'Thành công', {

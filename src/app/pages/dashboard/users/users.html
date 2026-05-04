@@ -5,14 +5,6 @@
         {{ 'users.title' | transloco }}
       </h2>
     </div>
-
-    <button
-      type="button"
-      class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-      (click)="loadUsers()"
-    >
-      {{ 'users.reload' | transloco }}
-    </button>
   </div>
 
   <p class="mb-3 text-sm text-rose-600" *ngIf="errorMessage()">{{ errorMessage() }}</p>

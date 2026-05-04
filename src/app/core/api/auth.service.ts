@@ -1,7 +1,7 @@
 // core/services/auth.service.ts
 import { inject, Injectable, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import { finalize, map, Observable, of, tap, throwError } from 'rxjs';
 import { BaseApiService } from './base-api.service';
 import { AuthTokenService } from './auth-token.service';
 
@@ -9,7 +9,6 @@ import { AuthTokenService } from './auth-token.service';
 export interface LoginPayload {
   email: string;
   password: string;
-  rememberMe: boolean;
 }
 
 export interface RegisterPayload {
@@ -20,6 +19,15 @@ export interface RegisterPayload {
 }
 
 export interface AuthResponse {
+  data: {
+    accessToken: string;
+    refreshToken: string;
+    expiresIn: string;
+    user: UserProfile;
+  };
+}
+
+export interface AuthPayload {
   accessToken: string;
   refreshToken: string;
   user: UserProfile;
@@ -28,8 +36,8 @@ export interface AuthResponse {
 export interface UserProfile {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  name: string;
+  role: string;
 }
 
 export interface ForgotPasswordPayload {
@@ -62,30 +70,40 @@ export class AuthService extends BaseApiService {
 
   // Selectors
   readonly currentUser = this._currentUser.asReadonly();
-  readonly isLoggedIn = computed(() => !!this._currentUser());
+  readonly isLoggedIn = computed(() => !!this._currentUser() && this.tokenService.hasTokens());
 
   // ── Auth ────────────────────────────────────────────────
-  login(payload: LoginPayload): Observable<AuthResponse> {
+  login(payload: LoginPayload, rememberMe = false): Observable<AuthPayload> {
     return this.post<AuthResponse>('auth/login', payload).pipe(
-      tap((res) => this.handleAuthSuccess(res)),
+      map((res) => res.data),
+      tap((res) => this.handleAuthSuccess(res, rememberMe)),
     );
   }
 
-  register(payload: RegisterPayload): Observable<AuthResponse> {
+  register(payload: RegisterPayload): Observable<AuthPayload> {
     return this.post<AuthResponse>('auth/register', payload).pipe(
-      tap((res) => this.handleAuthSuccess(res)),
+      map((res) => res.data),
+      tap((res) => this.handleAuthSuccess(res, true)),
     );
   }
 
-  logout(): void {
-    // Gọi API logout nếu BE cần revoke token
-    this.post('auth/logout', {
-      refreshToken: this.tokenService.getRefreshToken(),
-    }).subscribe({ error: () => {} }); // ignore error
+  logout(): Observable<void> {
+    const refreshToken = this.tokenService.getRefreshToken();
 
-    this.tokenService.clear();
-    this._currentUser.set(null);
-    this.router.navigate(['/login']);
+    if (!refreshToken || this.tokenService.isRefreshTokenExpired()) {
+      this.clearSession();
+      this.router.navigate(['/login']);
+      return of(void 0);
+    }
+
+    return this.post<void>('auth/logout', {
+      refreshToken,
+    }).pipe(
+      finalize(() => {
+        this.clearSession();
+        this.router.navigate(['/login']);
+      }),
+    );
   }
 
   // ── Password ────────────────────────────────────────────
@@ -102,15 +120,43 @@ export class AuthService extends BaseApiService {
   }
 
   // ── Token ───────────────────────────────────────────────
-  refreshToken(): Observable<AuthResponse> {
+  refreshToken(): Observable<AuthPayload> {
+    const refreshToken = this.tokenService.getRefreshToken();
+    if (!refreshToken || this.tokenService.isRefreshTokenExpired()) {
+      this.clearSession();
+      return throwError(() => new Error('Refresh token expired'));
+    }
+
     return this.post<AuthResponse>('auth/refresh', {
-      refreshToken: this.tokenService.getRefreshToken(), // ← lấy token từ tokenService
+      refreshToken,
     }).pipe(
+      map((res) => res.data),
       tap((res) => {
-        this.tokenService.setTokens(res.accessToken, res.refreshToken);
+        this.tokenService.setTokens(
+          res.accessToken,
+          res.refreshToken,
+          this.tokenService.shouldPersistSession(),
+        );
         this._currentUser.set(res.user);
+        this.saveUserToStorage(res.user);
       }),
     );
+  }
+
+  hasActiveSession(): boolean {
+    if (!this.tokenService.hasTokens() || this.tokenService.isRefreshTokenExpired()) {
+      this.clearSession();
+      return false;
+    }
+
+    return !!this._currentUser();
+  }
+
+  clearSession(): void {
+    this.tokenService.clear();
+    this._currentUser.set(null);
+    localStorage.removeItem('currentUser');
+    sessionStorage.removeItem('currentUser');
   }
 
   // ── Profile ─────────────────────────────────────────────
@@ -124,18 +170,35 @@ export class AuthService extends BaseApiService {
   }
 
   // ── Helpers ─────────────────────────────────────────────
-  private handleAuthSuccess(res: AuthResponse): void {
-    this.tokenService.setTokens(res.accessToken, res.refreshToken);
+  private handleAuthSuccess(res: AuthPayload, rememberMe: boolean): void {
+    this.tokenService.setTokens(res.accessToken, res.refreshToken, rememberMe);
     this._currentUser.set(res.user);
     this.saveUserToStorage(res.user);
   }
 
   private saveUserToStorage(user: UserProfile): void {
-    localStorage.setItem('currentUser', JSON.stringify(user));
+    if (this.tokenService.shouldPersistSession()) {
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      sessionStorage.removeItem('currentUser');
+      return;
+    }
+
+    sessionStorage.setItem('currentUser', JSON.stringify(user));
+    localStorage.removeItem('currentUser');
   }
 
   private getUserFromStorage(): UserProfile | null {
-    const raw = localStorage.getItem('currentUser');
-    return raw ? JSON.parse(raw) : null;
+    const raw = localStorage.getItem('currentUser') ?? sessionStorage.getItem('currentUser');
+    if (!raw || raw === 'undefined' || raw === 'null') {
+      return null;
+    }
+
+    try {
+      return JSON.parse(raw) as UserProfile;
+    } catch {
+      localStorage.removeItem('currentUser');
+      sessionStorage.removeItem('currentUser');
+      return null;
+    }
   }
 }

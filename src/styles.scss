@@ -1,5 +1,6 @@
 /* Sau */
 @use 'tailwindcss';
+@import '@angular/cdk/overlay-prebuilt.css';
 @import 'ag-grid-community/styles/ag-theme-quartz.min.css';
 
 :root {
@@ -56,4 +57,44 @@
 @theme {
   --color-brand-500: #7592ff;
   --color-brand-600: #7592ff;
+}
+
+.app-popup-backdrop {
+  background: rgba(15, 23, 42, 0.46);
+  backdrop-filter: blur(2px);
+}
+
+.app-popup-panel {
+  display: block;
+  animation: app-popup-enter 140ms ease-out;
+  outline: none;
+}
+
+.app-popup-panel--fullscreen {
+  width: calc(100vw - 32px);
+}
+
+.app-popup-panel--fullscreen .app-popup-shell {
+  height: calc(100vh - 32px);
+  max-height: calc(100vh - 32px);
+}
+
+@keyframes app-popup-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 640px) {
+  .app-popup-panel:not(.app-popup-panel--fullscreen) {
+    align-self: end;
+    width: 100vw !important;
+    max-width: 100vw !important;
+  }
 }
