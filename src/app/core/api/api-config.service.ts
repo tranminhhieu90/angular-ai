@@ -1,6 +1,6 @@
 // core/services/api-config.service.ts
+import { environment } from '@/app/environments/environment';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
 
 type ServiceName = keyof typeof environment.services;
 

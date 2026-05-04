@@ -86,10 +86,15 @@
   <!-- Logout -->
   <div class="border-t border-slate-800 p-4" [class.hidden]="isCollapsed">
     <button
+      type="button"
       class="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-700 px-3 py-2 text-sm font-medium text-slate-200 transition hover:bg-slate-800"
+      [disabled]="isLoggingOut()"
+      [class.cursor-not-allowed]="isLoggingOut()"
+      [class.opacity-60]="isLoggingOut()"
+      (click)="logout()"
     >
       <tui-icon icon="@tui.log-out" class="text-sm"></tui-icon>
-      Đăng xuất
+      {{ isLoggingOut() ? 'Đang đăng xuất...' : 'Đăng xuất' }}
     </button>
   </div>
 </aside>

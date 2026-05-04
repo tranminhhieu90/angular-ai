@@ -1,5 +1,5 @@
 import { Directive, Input, TemplateRef, ViewContainerRef, inject, OnInit } from '@angular/core';
-import { AuthService } from '../../core/api/auth.service';
+import { AuthService } from '@/app/core/api/auth.service';
 
 /**
  * Directive để ẩn/hiện element dựa trên role của user

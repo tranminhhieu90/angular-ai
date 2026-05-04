@@ -7,11 +7,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthPageLayoutComponent } from '../../layouts/auth-page-layout/auth-page-layout.component';
+import { AuthPageLayoutComponent } from '@/app/layouts/auth-page-layout/auth-page-layout.component';
 import { TuiButton, TuiIcon, TuiTextfield } from '@taiga-ui/core';
 import { TuiCheckbox, TuiChevron, TuiDataListWrapper, TuiSelect } from '@taiga-ui/kit';
-import { GoogleIconComponent } from '../../shared/components/icons/google-icon.component';
-import { AuthService } from '../../core/api/auth.service';
+import { GoogleIconComponent } from '@/app/shared/components/icons/google-icon.component';
+import { AuthService } from '@/app/core/api/auth.service';
 
 function strongPasswordValidator(control: AbstractControl): ValidationErrors | null {
   const value: string = control.value || '';

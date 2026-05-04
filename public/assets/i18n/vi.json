@@ -5,10 +5,11 @@
     "loading": "Đang tải dữ liệu users...",
     "columns": {
       "id": "Mã",
-      "fullName": "Họ và tên",
+      "full_name": "Họ và tên",
       "email": "Email",
       "role": "Vai trò",
-      "avatar": "Ảnh đại diện"
+      "avatar": "Ảnh đại diện",
+      "is_email_confirmed": "Đã xác thực email"
     },
     "avatarAvailable": "Có ảnh",
     "avatarNone": "Không có ảnh"

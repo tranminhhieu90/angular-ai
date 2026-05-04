@@ -1,13 +1,13 @@
 // core/guards/auth.guard.ts
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from '../api/auth.service';
+import { AuthService } from '@/app/core/api/auth.service';
 
 export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (authService.isLoggedIn()) {
+  if (authService.hasActiveSession()) {
     return true;
   }
 
@@ -19,7 +19,7 @@ export const guestGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (!authService.isLoggedIn()) {
+  if (!authService.hasActiveSession()) {
     return true;
   }
 
