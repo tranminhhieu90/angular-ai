@@ -3,8 +3,9 @@ import { HttpInterceptorFn, HttpErrorResponse, HttpRequest } from '@angular/comm
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, finalize, Observable, shareReplay, switchMap, throwError } from 'rxjs';
-import { AuthPayload, AuthService } from '@/app/core/api/auth.service';
+import { AuthService } from '@/app/core/api/auth.service';
 import { AuthTokenService } from '@/app/core/api/auth-token.service';
+import { AuthPayload } from '@/app/core/models/auth.models';
 
 let refreshRequest$: Observable<AuthPayload> | null = null;
 

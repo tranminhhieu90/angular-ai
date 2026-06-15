@@ -13,6 +13,8 @@ import { TuiCheckbox } from '@taiga-ui/kit';
 import { GoogleIconComponent } from '@/app/shared/components/icons/google-icon.component';
 import { ToastService } from '@/app/core/services/toast.service';
 import { AuthService } from '@/app/core/api/auth.service';
+import { Store } from '@ngrx/store';
+import { authActions } from '@/app/store/auth/auth.actions';
 
 function strongPasswordValidator(control: AbstractControl): ValidationErrors | null {
   // Validator hiện tại không yêu cầu gì, có thể mở rộng sau
@@ -39,6 +41,7 @@ export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);
+  private readonly store = inject(Store);
   readonly isSubmitting = signal(false);
   readonly errorMessage = signal<string | null>(null);
   showPassword = false;
@@ -92,7 +95,8 @@ export class LoginComponent {
       password: formValue.password,
     };
     this.authService.login(payload, formValue.rememberMe).subscribe({
-      next: () => {
+      next: ({ user }) => {
+        this.store.dispatch(authActions.loginSucceeded({ user }));
         this.isSubmitting.set(false);
         this.toast.success('Đăng nhập thành công!', 'Thành công', {
           positionClass: 'toast-top-right',

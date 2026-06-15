@@ -4,55 +4,16 @@ import { Router } from '@angular/router';
 import { finalize, map, Observable, of, tap, throwError } from 'rxjs';
 import { BaseApiService } from './base-api.service';
 import { AuthTokenService } from './auth-token.service';
-
-// ─── Interfaces ───────────────────────────────────────────
-export interface LoginPayload {
-  email: string;
-  password: string;
-}
-
-export interface RegisterPayload {
-  userName: string;
-  email: string;
-  password: string;
-  role: string;
-}
-
-export interface AuthResponse {
-  data: {
-    accessToken: string;
-    refreshToken: string;
-    expiresIn: string;
-    user: UserProfile;
-  };
-}
-
-export interface AuthPayload {
-  accessToken: string;
-  refreshToken: string;
-  user: UserProfile;
-}
-
-export interface UserProfile {
-  id: string;
-  email: string;
-  name: string;
-  role: string;
-}
-
-export interface ForgotPasswordPayload {
-  email: string;
-}
-
-export interface ResetPasswordPayload {
-  token: string;
-  newPassword: string;
-}
-
-export interface ChangePasswordPayload {
-  currentPassword: string;
-  newPassword: string;
-}
+import {
+  AuthPayload,
+  AuthResponse,
+  ChangePasswordPayload,
+  ForgotPasswordPayload,
+  LoginPayload,
+  RegisterPayload,
+  ResetPasswordPayload,
+  UserProfile,
+} from '../models/auth.models';
 
 // ─── Service ──────────────────────────────────────────────
 @Injectable({ providedIn: 'root' })

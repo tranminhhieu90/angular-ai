@@ -84,11 +84,13 @@
         <div
           class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500 text-xs font-semibold text-white"
         >
-          M
+          {{ userInitial() }}
         </div>
         <div class="hidden text-right leading-tight sm:block">
-          <p class="text-xs font-semibold text-slate-700">Musharof</p>
-          <p class="text-[11px] text-slate-400">Admin</p>
+          <p class="text-xs font-semibold text-slate-700">
+            {{ currentUser()?.name || currentUser()?.email || 'Người dùng' }}
+          </p>
+          <p class="text-[11px] text-slate-400">{{ currentUser()?.role || 'User' }}</p>
         </div>
         <svg
           viewBox="0 0 24 24"

@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { TuiIcon } from '@taiga-ui/core';
 import { SIDEBAR_MENU, SidebarGroup } from './sidebar.config';
 import { AuthService } from '@/app/core/api/auth.service';
+import { Store } from '@ngrx/store';
+import { authActions } from '@/app/store/auth/auth.actions';
 
 @Component({
   selector: 'app-sidebar',
@@ -13,6 +15,7 @@ import { AuthService } from '@/app/core/api/auth.service';
 })
 export class SidebarComponent {
   private readonly authService = inject(AuthService);
+  private readonly store = inject(Store);
 
   @Input() isOpen = false;
   @Input() isCollapsed = false;
@@ -36,6 +39,7 @@ export class SidebarComponent {
     }
 
     this.isLoggingOut.set(true);
+    this.store.dispatch(authActions.logoutSucceeded());
     this.authService.logout().subscribe({
       error: () => {
         this.isLoggingOut.set(false);
