@@ -6,8 +6,9 @@ import { authGuard } from './core/guards/auth.guard';
 export const routes: Routes = [
   {
     path: '', // Khi vào "/"
-    redirectTo: 'dashboard',
     pathMatch: 'full',
+    loadComponent: () => import('./pages/home/home').then((m) => m.HomeComponent),
+    title: 'Trang chủ | Angular AI Demo',
   },
   {
     path: 'signup',

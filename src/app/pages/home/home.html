@@ -1,1 +1,592 @@
-<p>home works!</p>
+<main class="home-shell">
+  <div class="home-bg" aria-hidden="true">
+    <div class="home-bg__gradient"></div>
+    <div class="home-bg__dots"></div>
+    <span class="home-bg__shape home-bg__shape--sun"></span>
+    <span class="home-bg__shape home-bg__shape--cloud"></span>
+    <span class="home-bg__shape home-bg__shape--bubble home-bg__shape--bubble-1"></span>
+    <span class="home-bg__shape home-bg__shape--bubble home-bg__shape--bubble-2"></span>
+    <span class="home-bg__shape home-bg__shape--bubble home-bg__shape--bubble-3"></span>
+    <span class="home-bg__star home-bg__star--1">✦</span>
+    <span class="home-bg__star home-bg__star--2">★</span>
+    <span class="home-bg__star home-bg__star--3">✦</span>
+  </div>
+  <div class="ambient ambient--top" aria-hidden="true"></div>
+  <div class="ambient ambient--bottom" aria-hidden="true"></div>
+  <div class="ambient ambient--side" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-header" [class.site-header--scrolled]="scrolled()">
+    <div class="page-container header-inner">
+      <a class="brand" href="#top" aria-label="Wapple English - Trang chủ">
+        <img
+          src="assets/images/logo.png"
+          style="width: 44px; height: 44px; object-fit: contain"
+          aria-hidden="true"
+          alt="Logo"
+        />
+        <span>Wapple English</span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="Điều hướng chính">
+        <a href="#features">Tính năng</a>
+        <a href="#demo">Học thử</a>
+        <a href="#method">Cách hoạt động</a>
+      </nav>
+
+      <div class="header-actions">
+        <a class="login-link" routerLink="/login">Đăng nhập</a>
+        <a class="button button--primary button--small" routerLink="/signup"> Bắt đầu miễn phí </a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero section" id="top">
+    <div class="page-container hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow reveal reveal--one">
+          <span class="eyebrow-dot"></span>
+          Cả gia đình cùng học — vui như chơi
+        </div>
+
+        <h1 class="hero-title reveal reveal--two">
+          Tiếng Anh hay hơn,
+          <span>từ chính nội dung bạn yêu thích.</span>
+        </h1>
+
+        <p class="hero-description reveal reveal--three">
+          Bé luyện đọc, nghe và phát âm qua truyện tranh, bài hát hay video yêu thích. Ba mẹ và
+          người lớn cũng có thể biến bài báo, slide công việc thành bài luyện tập trong vài giây.
+        </p>
+
+        <div class="hero-actions reveal reveal--four">
+          <a class="button button--primary button--large" routerLink="/signup">
+            Tạo bài học đầu tiên
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14M13 5l7 7-7 7" />
+            </svg>
+          </a>
+          <a class="button button--secondary button--large" href="#demo">
+            <span class="play-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="m9 7 8 5-8 5V7Z" /></svg>
+            </span>
+            Thử ngay trên trang
+          </a>
+        </div>
+
+        <div class="trust-row reveal reveal--four">
+          <div class="avatar-stack" aria-hidden="true">
+            <span>MA</span>
+            <span>QB</span>
+            <span>TH</span>
+          </div>
+          <div>
+            <div class="mini-stars" aria-label="5 trên 5 sao">★★★★★</div>
+            <p>Được tin dùng bởi phụ huynh, giáo viên và hơn 12.000 người học</p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="hero-product reveal reveal--three"
+        aria-label="Bản xem trước bài luyện Wapple English"
+      >
+        <div class="orbit orbit--one" aria-hidden="true"></div>
+        <div class="orbit orbit--two" aria-hidden="true"></div>
+
+        <div class="product-window">
+          <div class="window-bar">
+            <div class="window-dots" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </div>
+            <span class="window-address">practice.wapple.app</span>
+            <span class="live-pill"><i></i> LIVE</span>
+          </div>
+
+          <div class="lesson-meta">
+            <span>DAILY SPEAKING · LESSON 08</span>
+            <span>02:14</span>
+          </div>
+
+          <div class="prompt-preview">
+            <p>
+              <span class="word-done">The best way to learn</span>
+              <span class="word-active">a language</span>
+              is to use it every single day.
+            </p>
+          </div>
+
+          <div class="audio-track" aria-hidden="true">
+            @for (height of voiceWaveHeights; track $index) {
+              <span [style.height.px]="height * 2.1"></span>
+            }
+          </div>
+
+          <div class="lesson-footer">
+            <button type="button" class="round-control" aria-label="Phát lại">
+              <svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.3-5.7L4 8.6M4 4v4.6h4.6" /></svg>
+            </button>
+            <button type="button" class="record-control" aria-label="Ghi âm">
+              <span></span>
+            </button>
+            <button type="button" class="round-control" aria-label="Bài tiếp theo">
+              <svg viewBox="0 0 24 24"><path d="m9 7 7 5-7 5V7Zm8 0v10" /></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="floating-score floating-score--accuracy">
+          <span class="score-icon score-icon--cyan">
+            <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" /></svg>
+          </span>
+          <div><strong>94%</strong><small>Độ chính xác</small></div>
+        </div>
+
+        <div class="floating-score floating-score--streak">
+          <span class="score-icon score-icon--orange">🔥</span>
+          <div><strong>14 ngày</strong><small>Chuỗi học liên tục</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-container stats" id="home-stats">
+      @for (counter of counters(); track counter.label) {
+        <div class="stat-item">
+          <strong>{{ formatCounter(counter.value) }}{{ counter.suffix }}</strong>
+          <span>{{ counter.label }}</span>
+        </div>
+      }
+      <div class="stat-note">
+        <span class="pulse-dot"></span>
+        <p>Nội dung của bạn luôn riêng tư và chỉ thuộc về bạn.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section feature-section" id="features">
+    <div class="page-container">
+      <div class="section-heading section-heading--split">
+        <div>
+          <span class="section-kicker">BA KỸ NĂNG, MỘT NHỊP HỌC</span>
+          <h2>Vui cho bé, hiệu quả cho người lớn.<br />Mỗi ngày tiến một chút.</h2>
+        </div>
+        <p>
+          Wapple English kết nối đọc, nghe và nói trong cùng một trải nghiệm — phù hợp cho trẻ nhỏ
+          luyện phát âm lẫn người lớn ôn thi, thuyết trình hay giao tiếp công việc.
+        </p>
+      </div>
+
+      <div class="feature-grid">
+        @for (feature of features; track feature.title; let index = $index) {
+          <article class="feature-card" [style.--feature-color]="feature.color">
+            <div class="feature-topline">
+              <span>0{{ index + 1 }}</span>
+              <span>{{ feature.eyebrow }}</span>
+            </div>
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path [attr.d]="feature.iconPath" />
+              </svg>
+            </div>
+            <h3>{{ feature.title }}</h3>
+            <p>{{ feature.description }}</p>
+            <a href="#demo">
+              Học thử
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+            </a>
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section demo-section" id="demo">
+    <div class="page-container demo-layout">
+      <div class="demo-copy">
+        <span class="section-kicker">PHÒNG TẬP CỦA BẠN</span>
+        <h2>Thử một vòng ngay.<br />Không cần đăng ký.</h2>
+        <p>
+          Bé hay ba mẹ đều có thể chọn chế độ và tương tác trực tiếp. Đây là bản mô phỏng ngắn của
+          trải nghiệm học trong Wapple English.
+        </p>
+
+        <div class="tab-list" role="tablist" aria-label="Chọn chế độ học thử">
+          @for (tab of tabs; track tab.id; let index = $index) {
+            <button
+              type="button"
+              class="tab-button"
+              role="tab"
+              [attr.aria-selected]="activeTab() === tab.id"
+              [class.tab-button--active]="activeTab() === tab.id"
+              (click)="setActiveTab(tab.id)"
+            >
+              <span>0{{ index + 1 }}</span>
+              {{ tab.label }}
+            </button>
+          }
+        </div>
+
+        <p class="demo-tip">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 2v4m0 12v4M4.9 4.9l2.8 2.8m8.6 8.6 2.8 2.8M2 12h4m12 0h4M4.9 19.1l2.8-2.8m8.6-8.6 2.8-2.8"
+            />
+          </svg>
+          Mẹo: bé có thể dùng truyện yêu thích, còn ba mẹ dùng slide sắp thuyết trình — luyện tập
+          hữu ích ngay lập tức.
+        </p>
+      </div>
+
+      <div class="demo-stage">
+        <div class="stage-label">
+          <span>INTERACTIVE DEMO</span>
+          <span class="stage-status"><i></i> READY</span>
+        </div>
+
+        @if (activeTab() === 'teleprompter') {
+          <div class="demo-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-number">01</span>
+                <div>
+                  <strong>Máy nhắc chữ</strong>
+                  <small>Nhập đoạn văn và đọc theo nhịp</small>
+                </div>
+              </div>
+              <span class="mode-chip">READ</span>
+            </div>
+
+            <label class="field-label" for="tele-text">NỘI DUNG CỦA BẠN</label>
+            <textarea
+              id="tele-text"
+              class="demo-textarea"
+              rows="3"
+              [value]="teleText()"
+              (input)="updateTeleText($event)"
+            ></textarea>
+
+            <div class="teleprompter-display" aria-live="polite">
+              @for (word of teleWords(); track $index; let index = $index) {
+                <span
+                  [class.word-current]="index === telePosition()"
+                  [class.word-past]="index < telePosition()"
+                  >{{ word }}</span
+                >
+              }
+            </div>
+
+            <button
+              type="button"
+              class="panel-action"
+              [class.panel-action--stop]="teleRunning()"
+              (click)="toggleTeleprompter()"
+            >
+              @if (teleRunning()) {
+                <span class="stop-symbol"></span>
+                Dừng lại
+              } @else {
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7V5Z" /></svg>
+                Bắt đầu đọc
+              }
+            </button>
+          </div>
+        }
+
+        @if (activeTab() === 'dictation') {
+          <div class="demo-panel demo-panel--cyan">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-number panel-number--cyan">02</span>
+                <div>
+                  <strong>Luyện nghe chính tả</strong>
+                  <small>Nghe kỹ và viết lại câu bạn nghe được</small>
+                </div>
+              </div>
+              <span class="mode-chip mode-chip--cyan">LISTEN</span>
+            </div>
+
+            <div class="dictation-player">
+              <button
+                type="button"
+                class="sound-button"
+                [class.sound-button--playing]="dictationPlaying()"
+                (click)="playDictation()"
+                aria-label="Phát câu tiếng Anh"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M11 5 6 9H3v6h3l5 4V5Zm4.5 4.5a4 4 0 0 1 0 5m2.8-7.8a7.5 7.5 0 0 1 0 10.6"
+                  />
+                </svg>
+              </button>
+              <div class="waveform" aria-hidden="true">
+                @for (height of waveHeights; track $index) {
+                  <span
+                    [class.wave-playing]="dictationPlaying()"
+                    [style.height.px]="height * 2.4"
+                  ></span>
+                }
+              </div>
+              <span>00:04</span>
+            </div>
+
+            <div class="sentence-dots" aria-label="Chọn câu">
+              @for (sentence of sentences; track sentence; let index = $index) {
+                <button
+                  type="button"
+                  [class.sentence-dot--active]="dictationIndex() === index"
+                  (click)="selectSentence(index)"
+                  [attr.aria-label]="'Chọn câu ' + (index + 1)"
+                ></button>
+              }
+            </div>
+
+            <label class="field-label" for="dictation-answer">CÂU TRẢ LỜI CỦA BẠN</label>
+            <textarea
+              id="dictation-answer"
+              class="demo-textarea demo-textarea--cyan"
+              rows="3"
+              [value]="dictationAnswer()"
+              (input)="updateDictationAnswer($event)"
+              placeholder="Gõ những gì bạn nghe được..."
+            ></textarea>
+
+            @if (dictationScore() !== null) {
+              <div class="result-box">
+                <strong>{{ dictationScore() }}%</strong>
+                <div>
+                  <span>{{ getDictationFeedback(dictationScore() ?? 0) }}</span>
+                  <small>{{ sentences[dictationIndex()] }}</small>
+                </div>
+              </div>
+            }
+
+            <button
+              type="button"
+              class="panel-action panel-action--cyan"
+              [disabled]="!dictationAnswer().trim()"
+              (click)="scoreDictation()"
+            >
+              Chấm điểm câu trả lời
+            </button>
+          </div>
+        }
+
+        @if (activeTab() === 'voice') {
+          <div class="demo-panel demo-panel--violet">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-number panel-number--violet">03</span>
+                <div>
+                  <strong>Chấm điểm phát âm</strong>
+                  <small>Đọc câu mẫu và xem độ chính xác</small>
+                </div>
+              </div>
+              <span class="mode-chip mode-chip--violet">SPEAK</span>
+            </div>
+
+            <div class="voice-target">
+              <span>ĐỌC CÂU SAU</span>
+              <p>{{ voiceTarget }}</p>
+            </div>
+
+            <div class="recording-area">
+              <button
+                type="button"
+                class="microphone-button"
+                [class.microphone-button--recording]="voiceRecording()"
+                (click)="toggleVoiceRecording()"
+                [attr.aria-label]="voiceRecording() ? 'Dừng ghi âm' : 'Bắt đầu ghi âm'"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Zm7 9v1a7 7 0 0 1-14 0v-1m7 8v3m-4 0h8"
+                  />
+                </svg>
+              </button>
+              <div
+                class="voice-wave"
+                [class.voice-wave--active]="voiceRecording()"
+                aria-hidden="true"
+              >
+                @for (height of voiceWaveHeights; track $index) {
+                  <span [style.height.px]="height * 1.8"></span>
+                }
+              </div>
+              <small>{{
+                voiceRecording() ? 'Đang ghi âm... nhấn để dừng' : 'Nhấn micro để bắt đầu'
+              }}</small>
+            </div>
+
+            @if (voiceTranscript() && !voiceRecording()) {
+              <div class="transcript-box">
+                <span>KẾT QUẢ NHẬN DẠNG</span>
+                <p>
+                  @for (word of voiceWords(); track $index) {
+                    <mark [class.word-wrong]="!word.correct">{{ word.word }}</mark>
+                  }
+                </p>
+              </div>
+            }
+
+            @if (voiceScore() !== null) {
+              <div class="result-box result-box--violet">
+                <strong>{{ voiceScore() }}%</strong>
+                <div>
+                  <span>{{ getVoiceFeedback(voiceScore() ?? 0) }}</span>
+                  <small>Độ chính xác phát âm</small>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section method-section" id="method">
+    <div class="page-container method-grid">
+      <div class="method-copy">
+        <span class="section-kicker">HỌC THEO CÁCH CỦA BẠN</span>
+        <h2>Từ nội dung thật<br />đến phản xạ thật.</h2>
+        <p>
+          Không còn bài học khô khan. Trẻ luyện qua truyện và bài hát yêu thích; người lớn luyện qua
+          tài liệu công việc, học tập và cuộc sống hàng ngày.
+        </p>
+
+        <div class="step-list">
+          @for (step of steps; track step.number) {
+            <article class="step-item">
+              <span>{{ step.number }}</span>
+              <div>
+                <h3>{{ step.title }}</h3>
+                <p>{{ step.description }}</p>
+              </div>
+            </article>
+          }
+        </div>
+      </div>
+
+      <div class="progress-card">
+        <div class="progress-header">
+          <div>
+            <span>WEEKLY REPORT</span>
+            <h3>Tuần này của bạn</h3>
+          </div>
+          <span class="trend">↗ 18%</span>
+        </div>
+
+        <div class="week-chart" aria-label="Biểu đồ hoạt động 7 ngày">
+          @for (day of weeklyActivity; track day.label) {
+            <div>
+              <span [style.height.%]="day.height"></span>
+              <small>{{ day.label }}</small>
+            </div>
+          }
+        </div>
+
+        <div class="progress-list">
+          @for (item of progressCards; track item.label) {
+            <div class="progress-item">
+              <div>
+                <span>{{ item.label }}</span
+                ><strong [style.color]="item.color">{{ item.value }}</strong>
+              </div>
+              <div class="progress-track">
+                <i [style.width]="item.width" [style.background]="item.color"></i>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="streak-banner">
+          <span>🔥</span>
+          <div>
+            <strong>14 ngày liên tục</strong
+            ><small>Bạn đang ở top 8% người học chăm chỉ nhất.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section testimonial-section">
+    <div class="page-container">
+      <div class="section-heading section-heading--center">
+        <span class="section-kicker">CÂU CHUYỆN TỪ GIA ĐÌNH &amp; GIÁO VIÊN</span>
+        <h2>Học vui, tiến bộ thật.<br />Cả nhà đều thấy.</h2>
+      </div>
+
+      <div class="testimonial-grid">
+        @for (testimonial of testimonials; track testimonial.name) {
+          <article class="testimonial-card">
+            <div class="quote-mark">“</div>
+            <div class="testimonial-stars" aria-label="5 trên 5 sao">
+              @for (star of stars; track star) {
+                <span>★</span>
+              }
+            </div>
+            <div class="quote">{{ testimonial.quote }}</div>
+            <div class="testimonial-author">
+              <span>{{ testimonial.initials }}</span>
+              <div>
+                <strong>{{ testimonial.name }}</strong
+                ><small>{{ testimonial.role }}</small>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-section">
+    <div class="page-container">
+      <div class="cta-card">
+        <div class="cta-grid" aria-hidden="true"></div>
+        <div class="cta-orb" aria-hidden="true"></div>
+        <div class="cta-content">
+          <span class="section-kicker">BẮT ĐẦU TỪ HÔM NAY</span>
+          <h2>Bài đọc tiếp theo của bé<br />có thể là bài học đầu tiên.</h2>
+          <p>Miễn phí để bắt đầu. Cả gia đình chỉ mất chưa đầy một phút.</p>
+          <a class="button button--light button--large" routerLink="/signup">
+            Tạo tài khoản miễn phí
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+          </a>
+          <div class="benefit-list">
+            @for (benefit of benefits; track benefit) {
+              <span><i>✓</i>{{ benefit }}</span>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="page-container footer-main">
+      <div>
+        <a class="brand" href="#top" aria-label="Wapple English - Trang chủ">
+          <img
+            src="assets/images/logo.png"
+            style="width: 44px; height: 44px; object-fit: contain"
+            aria-hidden="true"
+            alt="Logo"
+          />
+          <span>Wapple English</span>
+        </a>
+        <p>Tiếng Anh hay hơn — cho cả bé và cả nhà, từ nội dung bạn yêu thích.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#features">Tính năng</a>
+        <a href="#demo">Học thử</a>
+        <a routerLink="/login">Đăng nhập</a>
+        <a routerLink="/signup">Đăng ký</a>
+      </div>
+    </div>
+    <div class="page-container footer-bottom">
+      <span>© 2026 Wapple English. Made for curious learners.</span>
+      <div><a href="#top">Điều khoản</a><a href="#top">Bảo mật</a></div>
+    </div>
+  </footer>
+</main>
