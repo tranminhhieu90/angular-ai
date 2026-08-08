@@ -25,12 +25,6 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     { id: 'voice', label: '🎤 Phát âm' },
   ];
 
-  readonly counters = signal<Counter[]>([
-    { value: 0, target: 12000, suffix: '+', label: '🧒 Bé đang học' },
-    { value: 0, target: 98, suffix: '%', label: '😊 Phụ huynh hài lòng' },
-    { value: 0, target: 50, suffix: '+', label: '📚 Bài học mẫu' },
-  ]);
-
   readonly features = [
     {
       eyebrow: '📖 READ',
@@ -106,8 +100,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       initials: 'MA',
     },
     {
-      quote:
-        'Bé nhà tôi thích nhất phần nghe chính tả vì được tự chọn bài yêu thích.',
+      quote: 'Bé nhà tôi thích nhất phần nghe chính tả vì được tự chọn bài yêu thích.',
       name: 'Anh Trần Quốc Bảo',
       role: 'Bố của bé Minh, 8 tuổi',
       initials: 'QB',
@@ -177,14 +170,12 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     const statsElement = document.querySelector<HTMLElement>('#home-stats');
 
     if (!statsElement || typeof IntersectionObserver === 'undefined') {
-      this.animateCounters();
       return;
     }
 
     this.statsObserver = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting) {
-          this.animateCounters();
           this.statsObserver?.disconnect();
         }
       },
@@ -330,25 +321,5 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       .trim()
       .split(/\s+/)
       .filter(Boolean);
-  }
-
-  private animateCounters(): void {
-    if (this.countersAnimated) return;
-    this.countersAnimated = true;
-
-    this.counters().forEach((counter, counterIndex) => {
-      const step = Math.ceil(counter.target / 48);
-      const timer = setInterval(() => {
-        this.counters.update((items) =>
-          items.map((item, itemIndex) =>
-            itemIndex === counterIndex
-              ? { ...item, value: Math.min(item.value + step, item.target) }
-              : item,
-          ),
-        );
-        if (this.counters()[counterIndex].value >= counter.target) clearInterval(timer);
-      }, 28);
-      this.counterTimers.push(timer);
-    });
   }
 }
