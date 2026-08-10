@@ -58,7 +58,6 @@ export class SignupComponent {
       password: ['', [Validators.required, Validators.minLength(8), strongPasswordValidator]],
       confirmPassword: ['', Validators.required],
       agreeToTerms: [false, Validators.requiredTrue],
-      role: [''],
     },
     { validators: confirmPasswordValidator },
   );
@@ -123,13 +122,12 @@ export class SignupComponent {
       return;
     }
 
-    console.log(this.form.getRawValue());
     const formValue = this.form.getRawValue();
     this.isSubmitting.set(true);
     this.errorMessage.set(null);
 
     const data = {
-      role: formValue.role,
+      role: 'user',
       userName: formValue.firstName + formValue.lastName,
       email: formValue.email,
       password: formValue.password,
