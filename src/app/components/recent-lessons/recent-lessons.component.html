@@ -1,0 +1,52 @@
+<div class="recent-lessons">
+  <!-- Header -->
+  <div class="recent-lessons__header">
+    <h3 class="recent-lessons__title">
+      <span class="recent-lessons__title-icon">✨</span>
+      Bài học gần đây
+    </h3>
+    <button class="recent-lessons__view-all" (click)="onViewAll()">
+      Xem tất cả <span>›</span>
+    </button>
+  </div>
+
+  <!-- Lesson list -->
+  <ul class="lesson-list">
+    <li *ngFor="let lesson of lessons" class="lesson-item" (click)="onLessonClick(lesson)">
+      <!-- Icon -->
+      <div class="lesson-item__icon">
+        <span>📖</span>
+      </div>
+
+      <!-- Info -->
+      <div class="lesson-item__info">
+        <p class="lesson-item__title">{{ lesson.title }}</p>
+        <p class="lesson-item__meta">
+          {{ lesson.category }} · {{ lesson.date | date: 'dd/MM/yyyy' }}
+        </p>
+      </div>
+
+      <!-- Scores -->
+      <div class="lesson-item__scores">
+        <ng-container *ngIf="lesson.writeScore !== null; else noScore">
+          <span
+            class="score-badge score-badge--write"
+            [class.score-badge--green]="scoreColor(lesson.writeScore!) === 'green'"
+          >
+            {{ lesson.writeScore }}
+          </span>
+          <span
+            class="score-badge score-badge--read"
+            [class.score-badge--green]="scoreColor(lesson.readScore!) === 'green'"
+          >
+            {{ lesson.readScore }}
+          </span>
+        </ng-container>
+        <ng-template #noScore>
+          <span class="score-badge score-badge--empty">–</span>
+          <span class="score-badge score-badge--empty">–</span>
+        </ng-template>
+      </div>
+    </li>
+  </ul>
+</div>

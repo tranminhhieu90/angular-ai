@@ -1,0 +1,11 @@
+<div class="flex min-h-screen bg-slate-100 text-slate-800">
+  <!-- Sidebar -->
+  <user-sidebar />
+  <!-- Main -->
+  <div class="flex min-w-0 flex-1 flex-col">
+    <user-dashboard-header />
+    <main class="min-w-0 flex-1 p-4 sm:p-6">
+      <router-outlet />
+    </main>
+  </div>
+</div>

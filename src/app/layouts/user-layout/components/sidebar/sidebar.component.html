@@ -1,0 +1,77 @@
+<div
+  [ngClass]="[
+    'fixed inset-y-0 left-0 z-50 flex flex-col border-r border-emerald-100 bg-white text-slate-900',
+    'lg:sticky lg:top-0 lg:z-auto lg:translate-x-0 lg:h-screen min-w-[16rem] max-w-[16rem]',
+  ]"
+>
+  <!-- Logo -->
+  <div class="flex h-24 items-center justify-between border-b border-emerald-100 px-6">
+    <div class="flex min-w-0 flex-1 items-center justify-center p-3">
+      <img
+        src="assets/images/logo.png"
+        alt="Wapple English"
+        class="h-28 w-auto object-contain transition-all"
+      />
+    </div>
+    <button
+      type="button"
+      class="absolute right-3 top-3 text-emerald-700 transition hover:text-emerald-900 lg:hidden"
+    >
+      <tui-icon icon="@tui.x" class="text-base"></tui-icon>
+    </button>
+  </div>
+
+  <div class="flex-1 overflow-y-auto px-3 py-3">
+    <!-- Profile -->
+    <div
+      class="mb-5 flex items-center gap-3 rounded-xl border border-lime-100 bg-gradient-to-br from-emerald-50 to-amber-50 p-4"
+    >
+      <div
+        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-amber-500 text-sm font-bold text-white shadow-sm"
+      >
+        {{ userInitial() }}
+      </div>
+      <div class="min-w-0">
+        <p class="truncate text-sm font-bold leading-5 text-slate-950">{{ displayName() }}</p>
+        <div class="mt-0.5 flex items-center gap-1.5 text-xs font-medium text-emerald-700">
+          <span>Intermediate</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="space-y-2 text-sm font-semibold">
+      @for (item of menu; track item.label) {
+        <a
+          [routerLink]="item.link"
+          routerLinkActive="!bg-emerald-600 !text-white shadow-md shadow-emerald-600/25"
+          [routerLinkActiveOptions]="{ exact: !!item.exact }"
+          [ngClass]="[
+            'flex h-11 items-center gap-3 rounded-xl px-4 text-emerald-800 transition hover:bg-emerald-50',
+            item.soft ? 'bg-emerald-50' : '',
+          ]"
+        >
+          <span class="text-lg leading-none">{{ item.icon }}</span>
+          <span class="truncate">{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+  </div>
+
+  <!-- Logout -->
+  <div class="px-6 py-5">
+    <button
+      type="button"
+      class="flex w-full items-center gap-3 rounded-xl px-1 py-2 text-sm font-bold text-emerald-700 transition hover:text-emerald-900"
+      [disabled]="isLoggingOut()"
+      [class.cursor-not-allowed]="isLoggingOut()"
+      [class.opacity-60]="isLoggingOut()"
+      (click)="logout()"
+    >
+      <tui-icon icon="@tui.log-out" class="text-lg"></tui-icon>
+      <span>
+        {{ isLoggingOut() ? 'Đang đăng xuất...' : 'Đăng xuất' }}
+      </span>
+    </button>
+  </div>
+</div>

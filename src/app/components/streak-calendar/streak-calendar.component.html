@@ -1,0 +1,56 @@
+<div class="streak-cal">
+  <!-- Header -->
+  <div class="streak-cal__header">
+    <div class="streak-cal__title-group">
+      <span class="streak-cal__title-icon">📅</span>
+      <h3 class="streak-cal__title">{{ headerLabel() }}</h3>
+    </div>
+    <div class="streak-cal__header-right">
+      <span class="streak-cal__badge">{{ headerBadge() }}</span>
+      <div class="streak-cal__nav">
+        <button class="streak-cal__nav-btn" (click)="prevMonth()" title="Tháng trước">‹</button>
+        <button
+          class="streak-cal__nav-btn"
+          (click)="nextMonth()"
+          [disabled]="isNextDisabled()"
+          title="Tháng sau"
+        >
+          ›
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Weekday labels -->
+  <div class="streak-cal__weekdays">
+    <span *ngFor="let wd of WEEK_DAYS" class="streak-cal__weekday">{{ wd }}</span>
+  </div>
+
+  <!-- Day grid -->
+  <div class="streak-cal__grid">
+    <div
+      *ngFor="let cell of calendarDays()"
+      class="streak-cal__cell"
+      [class.streak-cal__cell--empty]="!cell.day"
+      [class.streak-cal__cell--streak]="cell.hasStreak && !cell.isToday"
+      [class.streak-cal__cell--today]="cell.isToday"
+      [class.streak-cal__cell--future]="cell.isFuture && !cell.isToday"
+      [class.streak-cal__cell--no-streak]="!cell.hasStreak && !cell.isFuture && cell.day"
+    >
+      <ng-container *ngIf="cell.day">
+        <span class="streak-cal__check" *ngIf="cell.hasStreak && !cell.isToday">✓</span>
+        <span class="streak-cal__day-num" *ngIf="!cell.hasStreak || cell.isToday">{{
+          cell.day
+        }}</span>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="streak-cal__progress-wrap">
+    <div class="streak-cal__progress-track">
+      <div class="streak-cal__progress-fill" [style.width.%]="progressPercent()"></div>
+    </div>
+    <span class="streak-cal__progress-label">{{ progressPercent() }}%</span>
+  </div>
+</div>

@@ -101,7 +101,7 @@ export class LoginComponent {
         this.toast.success('Đăng nhập thành công!', 'Thành công', {
           positionClass: 'toast-top-right',
         });
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/user-dashboard']);
       },
       error: (error) => {
         this.isSubmitting.set(false);

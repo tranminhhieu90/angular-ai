@@ -1,0 +1,10 @@
+<div class="stats-grid">
+  <div class="stat-card" *ngFor="let card of cards">
+    <div class="stat-card__icon" [style.background]="card.iconBg">
+      <span>{{ card.icon }}</span>
+    </div>
+    <p class="stat-card__label">{{ card.label }}</p>
+    <p class="stat-card__value">{{ card.value }}</p>
+    <p class="stat-card__subtext">{{ card.subtext }}</p>
+  </div>
+</div>

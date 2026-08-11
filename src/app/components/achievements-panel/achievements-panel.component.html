@@ -1,0 +1,23 @@
+<div class="achievements-panel">
+  <!-- Header -->
+  <h3 class="achievements-panel__title">
+    <span class="achievements-panel__title-icon">🏆</span>
+    Thành tích
+  </h3>
+
+  <!-- Achievement rows -->
+  <ul class="achievements-list">
+    <li
+      *ngFor="let item of achievements"
+      class="achievement-item"
+      [style.background]="item.bgColor"
+      [style.border-color]="item.borderColor"
+    >
+      <span class="achievement-item__icon">{{ item.icon }}</span>
+      <div class="achievement-item__text">
+        <p class="achievement-item__label">{{ item.label }}</p>
+        <p class="achievement-item__value">{{ item.value }}</p>
+      </div>
+    </li>
+  </ul>
+</div>

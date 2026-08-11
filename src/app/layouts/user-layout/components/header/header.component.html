@@ -1,0 +1,21 @@
+<header class="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
+  <div class="flex h-16 items-center justify-between px-4 sm:px-6">
+    <div>1</div>
+    <div class="flex items-center gap-3">
+      <!-- Notification -->
+      <button
+        type="button"
+        class="relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:bg-slate-50"
+      >
+        <tui-icon icon="@tui.bell" class="text-sm"></tui-icon>
+        <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-rose-500"></span>
+      </button>
+      <!-- User -->
+      <div
+        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-amber-500 text-sm font-bold text-white shadow-sm"
+      >
+        {{ userInitial() }}
+      </div>
+    </div>
+  </div>
+</header>
