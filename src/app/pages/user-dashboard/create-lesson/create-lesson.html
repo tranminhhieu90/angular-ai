@@ -1,1 +1,61 @@
-<div>Tạo bài học</div>
+<section class="lesson-card">
+  <header class="lesson-card__header">
+    <div class="lesson-card__icon">✏️</div>
+    <div>
+      <h1>Tạo bài học từ đoạn văn</h1>
+      <p>Nhập đoạn tiếng Anh — hệ thống tự tạo bài luyện đọc & viết</p>
+    </div>
+  </header>
+
+  <form class="lesson-form">
+    <label>
+      <span>Chủ đề (Topic) </span>
+      <select>
+        <option>Chọn chủ đề...</option>
+        <option>Reading habit</option>
+        <option>Daily life</option>
+        <option>Technology</option>
+      </select>
+    </label>
+
+    <label>
+      <span>Tiêu đề bài học </span>
+      <input type="text" placeholder="VD: The Importance of Reading Every Day" />
+    </label>
+
+    <label>
+      <span class="textarea-label">
+        Đoạn văn tiếng Anh
+        <small>{{ wordCount() }} từ</small>
+      </span>
+      <textarea
+        [value]="passage()"
+        (input)="passage.set($any($event.target).value)"
+        placeholder="Dán hoặc nhập đoạn văn tiếng Anh vào đây. Hệ thống sẽ tự động tạo bài luyện kỹ năng đọc và viết từ đoạn văn này..."
+      ></textarea>
+    </label>
+
+    <div class="ai-box">
+      <strong>✧ Wapple AI sẽ tự động tạo:</strong>
+      <div class="ai-box__items">
+        <div>
+          <span>📖</span>
+          <b>Bài đọc hiểu</b>
+        </div>
+        <div>
+          <span>✍️</span>
+          <b>Bài luyện viết</b>
+        </div>
+        <div>
+          <span>🔤</span>
+          <b>Từ vựng & ngữ pháp</b>
+        </div>
+      </div>
+    </div>
+
+    <button type="button">
+      <tui-icon icon="@tui.circle-plus" />
+      Tạo bài học ngay
+    </button>
+  </form>
+</section>

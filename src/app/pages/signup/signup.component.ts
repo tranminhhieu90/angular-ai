@@ -33,7 +33,6 @@ function strongPasswordValidator(control: AbstractControl): ValidationErrors | n
     TuiTextfield,
     TuiCheckbox,
     GoogleIconComponent,
-    TuiChevron,
     TuiDataListWrapper,
     TuiSelect,
   ],

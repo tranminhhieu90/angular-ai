@@ -44,10 +44,6 @@ export interface GetUsersParams {
 export class UserService extends BaseApiService {
   protected override readonly serviceName = 'user' as const;
 
-  /**
-   * Lấy danh sách user có phân trang
-   * GET /users?page=1&limit=20
-   */
   getUsers(params: GetUsersParams = {}): Observable<UsersResponse> {
     const queryParams: Record<string, string> = {};
     if (params.page != null) queryParams['page'] = String(params.page);

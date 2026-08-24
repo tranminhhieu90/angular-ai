@@ -1,1 +1,32 @@
-<div>Danh sách bài học</div>
+<section class="lessons-page">
+  <div class="lessons-toolbar">
+    <label class="search-box">
+      <tui-icon icon="@tui.search" />
+      <input placeholder="Tìm bài học..." />
+    </label>
+
+    <button type="button">
+      <tui-icon icon="@tui.circle-plus" />
+      Thêm bài học
+    </button>
+  </div>
+
+  <div class="lessons-card">
+    <header>
+      <h1>📚 Danh sách bài học</h1>
+      <span>5 bài</span>
+    </header>
+
+    <ag-grid-angular
+      class="ag-theme-quartz lessons-grid"
+      [gridOptions]="gridOptions"
+      [columnDefs]="columnDefs"
+      [rowData]="rowData"
+    />
+
+    <footer>
+      <strong>Hiển thị 5/5 bài</strong>
+      <p><i></i> ≥ 90 <i></i> ≥ 75 <i></i> &lt; 75</p>
+    </footer>
+  </div>
+</section>

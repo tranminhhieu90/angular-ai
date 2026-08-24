@@ -1,3 +1,264 @@
 :host {
   display: block;
+  min-height: calc(100vh - 6rem);
+  background: #f4fbef;
+  padding: 32px 18px;
+}
+
+.lessons-page {
+  max-width: 1080px;
+}
+
+.lessons-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+
+  button,
+  .search-box {
+    display: inline-flex;
+    height: 40px;
+    align-items: center;
+    gap: 10px;
+    border-radius: 14px;
+    font-weight: 800;
+  }
+
+  button {
+    border: 0;
+    padding: 0 22px;
+    background: #2fa557;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(30, 128, 68, 0.22);
+    cursor: pointer;
+  }
+}
+
+.search-box {
+  width: 300px;
+  border: 2px solid #dceee0;
+  background: #fff;
+  padding: 0 12px;
+  color: #6f9a72;
+
+  input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    color: #2a5331;
+    font: 700 14px inherit;
+
+    &::placeholder {
+      color: #6f9a72;
+    }
+  }
+}
+
+.lessons-card {
+  overflow: hidden;
+  border: 2px solid #dfeee0;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(24, 72, 34, 0.1);
+
+  header,
+  footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 22px;
+  }
+
+  header {
+    border-bottom: 1px solid #dfeee0;
+
+    h1 {
+      margin: 0;
+      color: #102815;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    span {
+      border-radius: 999px;
+      background: #eaf8ed;
+      color: #25a854;
+      padding: 4px 14px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+  }
+
+  footer {
+    border-top: 1px solid #dfeee0;
+    color: #6e956d;
+    font-size: 12px;
+    font-weight: 800;
+
+    p {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+    }
+
+    i {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #16c879;
+
+      &:nth-of-type(2) {
+        background: #66a7ff;
+      }
+
+      &:nth-of-type(3) {
+        background: #f4b40b;
+      }
+    }
+  }
+}
+
+.lessons-grid {
+  --ag-background-color: #fff;
+  --ag-border-color: #dfeee0;
+  --ag-cell-horizontal-padding: 20px;
+  --ag-font-family: inherit;
+  --ag-font-size: 12px;
+  --ag-header-background-color: #fff;
+  --ag-header-foreground-color: #668d64;
+  --ag-row-border-color: #dfeee0;
+  --ag-row-hover-color: #f8fff5;
+  width: 100%;
+}
+
+:host ::ng-deep {
+  .lessons-grid {
+    border: 0;
+
+    .ag-header-cell-text {
+      font-weight: 900;
+    }
+
+    .ag-cell {
+      display: flex;
+      align-items: center;
+      color: #1a2b1d;
+      font-weight: 800;
+    }
+  }
+
+  .lesson-id,
+  .score,
+  .topic {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    font-weight: 900;
+  }
+
+  .lesson-id {
+    min-width: 22px;
+    height: 16px;
+    background: #eaf5ea;
+    color: #6a9d66;
+    font-size: 11px;
+  }
+
+  .topic {
+    min-width: 86px;
+    height: 26px;
+    border: 1px solid transparent;
+    font-size: 12px;
+  }
+
+  .topic--technology {
+    border-color: #a5e9ec;
+    background: #c9f4f3;
+    color: #0086ac;
+  }
+
+  .topic--environment,
+  .topic--health {
+    border-color: #a7eec7;
+    background: #c8f8dc;
+    color: #008a45;
+  }
+
+  .topic--business {
+    border-color: #b6d9ff;
+    background: #cfe8ff;
+    color: #075dff;
+  }
+
+  .topic--culture {
+    border-color: #f3bfd7;
+    background: #ffdced;
+    color: #e00069;
+  }
+
+  .lesson-title,
+  .lesson-date {
+    display: block;
+  }
+
+  .lesson-title {
+    color: #111b12;
+    font-size: 14px;
+  }
+
+  .lesson-date {
+    margin-top: 2px;
+    color: #6c8f57;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .score {
+    min-width: 34px;
+    height: 22px;
+    border: 1px solid;
+    font-size: 12px;
+  }
+
+  .score--good {
+    border-color: #a4efc8;
+    background: #cdf8df;
+    color: #00a85b;
+  }
+
+  .score--ok {
+    border-color: #b9d8ff;
+    background: #d4e7ff;
+    color: #1267f1;
+  }
+
+  .score-empty,
+  .lesson-actions {
+    color: #71936f;
+  }
+
+  .lesson-actions {
+    letter-spacing: 10px;
+  }
+}
+
+@media (max-width: 760px) {
+  :host {
+    padding: 16px 10px;
+  }
+
+  .lessons-toolbar,
+  .lessons-card header,
+  .lessons-card footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .search-box {
+    width: 100%;
+  }
 }
