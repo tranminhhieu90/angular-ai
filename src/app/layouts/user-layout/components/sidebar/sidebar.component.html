@@ -51,7 +51,7 @@
             item.soft ? 'bg-emerald-50' : '',
           ]"
         >
-          <span class="text-lg leading-none">{{ item.icon }}</span>
+          <tui-icon [icon]="item.icon" class="text-lg"></tui-icon>
           <span class="truncate">{{ item.label }}</span>
         </a>
       }

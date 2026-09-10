@@ -1,0 +1,22 @@
+<app-popup-shell title="Xác nhận xóa" [showClose]="true" (closed)="cancel()">
+  <div class="delete-confirm-body">
+    <p class="delete-confirm-text">
+      Bạn có chắc muốn xóa bài học<br />
+      <strong class="lesson-title">"{{ data.title }}"</strong>?
+    </p>
+    <p class="delete-confirm-warning">Hành động này không thể hoàn tác.</p>
+  </div>
+
+  <footer class="delete-confirm-actions">
+    <button type="button" class="btn btn--cancel" (click)="cancel()">Hủy bỏ</button>
+    <button type="button" class="btn btn--delete" [disabled]="isDeleting()" (click)="confirm()">
+      @if (isDeleting()) {
+        <tui-icon icon="@tui.loader-circle" class="spin" />
+        Đang xóa...
+      } @else {
+        <tui-icon icon="@tui.trash-2" />
+        Xóa luôn
+      }
+    </button>
+  </footer>
+</app-popup-shell>

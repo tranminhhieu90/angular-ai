@@ -3,59 +3,83 @@
     <div class="lesson-card__icon">✏️</div>
     <div>
       <h1>Tạo bài học từ đoạn văn</h1>
-      <p>Nhập đoạn tiếng Anh — hệ thống tự tạo bài luyện đọc & viết</p>
+      <p>Nhập đoạn tiếng Anh — hệ thống tự tạo bài luyện đọc &amp; viết</p>
     </div>
   </header>
 
-  <form class="lesson-form">
+  <form class="lesson-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <!-- Chủ đề (Topic) -->
     <label>
-      <span>Chủ đề (Topic) </span>
-      <select>
-        <option>Chọn chủ đề...</option>
-        <option>Reading habit</option>
-        <option>Daily life</option>
-        <option>Technology</option>
+      <span>Chủ đề (Topic) <span class="required">*</span></span>
+      <select formControlName="topicId" [disabled]="isLoadingTopics()">
+        <option value="" disabled selected>
+          {{ isLoadingTopics() ? 'Đang tải...' : 'Chọn chủ đề...' }}
+        </option>
+        @for (topic of topics(); track topic.id) {
+          <option [value]="topic.id">{{ topic.name }}</option>
+        }
       </select>
+      @if (form.controls.topicId.invalid && form.controls.topicId.touched) {
+        <span class="field-error">Vui lòng chọn chủ đề.</span>
+      }
     </label>
 
+    <!-- Tiêu đề bài học -->
     <label>
-      <span>Tiêu đề bài học </span>
-      <input type="text" placeholder="VD: The Importance of Reading Every Day" />
+      <span>Tiêu đề bài học <span class="required">*</span></span>
+      <input
+        type="text"
+        formControlName="title"
+        placeholder="VD: The Importance of Reading Every Day"
+      />
+      @if (form.controls.title.invalid && form.controls.title.touched) {
+        @if (form.controls.title.errors?.['required']) {
+          <span class="field-error">Tiêu đề là bắt buộc.</span>
+        } @else if (form.controls.title.errors?.['minlength']) {
+          <span class="field-error">Tiêu đề tối thiểu 5 ký tự.</span>
+        }
+      }
     </label>
 
+    <!-- Đoạn văn tiếng Anh -->
     <label>
       <span class="textarea-label">
-        Đoạn văn tiếng Anh
+        Đoạn văn tiếng Anh <span class="required">*</span>
         <small>{{ wordCount() }} từ</small>
       </span>
       <textarea
-        [value]="passage()"
-        (input)="passage.set($any($event.target).value)"
+        formControlName="passage"
         placeholder="Dán hoặc nhập đoạn văn tiếng Anh vào đây. Hệ thống sẽ tự động tạo bài luyện kỹ năng đọc và viết từ đoạn văn này..."
       ></textarea>
+      @if (form.controls.passage.invalid && form.controls.passage.touched) {
+        @if (form.controls.passage.errors?.['required']) {
+          <span class="field-error">Đoạn văn là bắt buộc.</span>
+        } @else if (form.controls.passage.errors?.['minlength']) {
+          <span class="field-error">Đoạn văn quá ngắn (tối thiểu 20 ký tự).</span>
+        }
+      }
     </label>
 
+    <!-- AI info box -->
     <div class="ai-box">
       <strong>✧ Wapple AI sẽ tự động tạo:</strong>
       <div class="ai-box__items">
         <div>
-          <span>📖</span>
           <b>Bài đọc hiểu</b>
         </div>
         <div>
-          <span>✍️</span>
           <b>Bài luyện viết</b>
         </div>
         <div>
-          <span>🔤</span>
-          <b>Từ vựng & ngữ pháp</b>
+          <b>Từ vựng và ngữ pháp</b>
         </div>
       </div>
     </div>
 
-    <button type="button">
+    <!-- Submit button -->
+    <button type="submit" [disabled]="isSubmitting()">
       <tui-icon icon="@tui.circle-plus" />
-      Tạo bài học ngay
+      {{ isSubmitting() ? 'Đang tạo...' : 'Tạo bài học ngay' }}
     </button>
   </form>
 </section>

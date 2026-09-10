@@ -1,12 +1,19 @@
-import { Component } from '@angular/core';
+import { AuthService } from '@/app/core/api/auth.service';
+import { LessonDto, LessonService, LessonsResponse } from '@/app/core/api/lesson.service';
+import { ToastService } from '@/app/core/services/toast.service';
+import { Component, inject, Injector, OnInit, signal } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community';
-import { TuiIcon } from '@taiga-ui/core';
+import { TuiDialogService, TuiIcon } from '@taiga-ui/core';
+import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
+import { LessonActionsCellComponent } from './lesson-actions-cell/lesson-actions-cell';
+import { AddLessonDialogComponent } from './add-lesson-dialog/add-lesson-dialog';
 
 interface Lesson {
   id: number;
   topic: string;
   title: string;
+  rawText: string;
   date: string;
   writing?: number;
   reading?: number;
@@ -18,42 +25,14 @@ interface Lesson {
   templateUrl: './lessons.html',
   styleUrl: './lessons.scss',
 })
-export class LessonsComponent {
-  readonly rowData: Lesson[] = [
-    {
-      id: 1,
-      topic: 'Technology',
-      title: 'The Rise of Artificial Intelligence',
-      date: '28/07/2025',
-      writing: 88,
-      reading: 91,
-    },
-    {
-      id: 2,
-      topic: 'Environment',
-      title: 'Climate Change and Its Effects',
-      date: '01/08/2025',
-      writing: 76,
-      reading: 82,
-    },
-    {
-      id: 3,
-      topic: 'Health',
-      title: 'The Benefits of Regular Exercise',
-      date: '03/08/2025',
-      writing: 93,
-      reading: 89,
-    },
-    { id: 4, topic: 'Business', title: 'Remote Work in the Modern Era', date: '10/08/2025' },
-    {
-      id: 5,
-      topic: 'Culture',
-      title: 'Vietnamese Traditional Festivals',
-      date: '11/08/2025',
-      writing: 85,
-      reading: 90,
-    },
-  ];
+export class LessonsComponent implements OnInit {
+  private readonly authService = inject(AuthService);
+  private readonly lessonService = inject(LessonService);
+  private readonly toast = inject(ToastService);
+  private readonly dialogs = inject(TuiDialogService);
+  private readonly injector = inject(Injector);
+
+  readonly rowData = signal<Lesson[]>([]);
 
   readonly columnDefs: ColDef<Lesson>[] = [
     {
@@ -91,9 +70,9 @@ export class LessonsComponent {
     },
     {
       headerName: 'THAO TÁC',
-      width: 120,
+      width: 150,
       sortable: false,
-      cellRenderer: () => '<span class="lesson-actions">✎ 🗑</span>',
+      cellRenderer: LessonActionsCellComponent,
     },
   ];
 
@@ -103,7 +82,71 @@ export class LessonsComponent {
     headerHeight: 56,
     suppressCellFocus: true,
     defaultColDef: { sortable: true, resizable: false },
+    context: {
+      onLessonDeleted: () => this.loadLessons(),
+    },
   };
+
+  ngOnInit(): void {
+    this.loadLessons();
+  }
+
+  openAddDialog(): void {
+    this.dialogs
+      .open(new PolymorpheusComponent(AddLessonDialogComponent, this.injector), {
+        size: 'l',
+        dismissible: false,
+      })
+      .subscribe({
+        complete: () => this.loadLessons(),
+      });
+  }
+
+  loadLessons(title?: string, topic?: string): void {
+    const userId = Number(this.authService.currentUser()?.id);
+
+    if (!Number.isFinite(userId)) {
+      this.toast.error('Không thể xác định người dùng hiện tại.');
+      return;
+    }
+
+    this.lessonService
+      .getLessons({
+        userId,
+        title: title?.trim() || undefined,
+        topic: topic?.trim() || undefined,
+      })
+      .subscribe({
+        next: (response: LessonsResponse) => {
+          const lessons = response?.data ?? [];
+
+          this.rowData.set(lessons.map((lesson) => this.mapLesson(lesson)));
+        },
+        error: (error) => {
+          const message = error?.error?.message || 'Không thể tải danh sách bài học.';
+          this.toast.error(message);
+        },
+      });
+  }
+
+  private mapLesson(lesson: LessonDto): Lesson {
+    return {
+      id: lesson.id,
+      topic: lesson.topic,
+      title: lesson.title,
+      rawText: lesson.rawText ?? '',
+      date: this.formatDate(lesson.createdAt ?? lesson.date),
+      writing: lesson.writingScore ?? lesson.writing,
+      reading: lesson.readingScore ?? lesson.reading,
+    };
+  }
+
+  private formatDate(value?: string): string {
+    if (!value) return '';
+
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString('vi-VN');
+  }
 
   private score(value?: number): string {
     return value

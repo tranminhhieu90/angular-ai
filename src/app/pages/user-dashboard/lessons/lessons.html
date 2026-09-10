@@ -2,10 +2,14 @@
   <div class="lessons-toolbar">
     <label class="search-box">
       <tui-icon icon="@tui.search" />
-      <input placeholder="Tìm bài học..." />
+      <input
+        #titleFilter
+        placeholder="Tìm bài học..."
+        (keyup.enter)="loadLessons(titleFilter.value)"
+      />
     </label>
 
-    <button type="button">
+    <button type="button" (click)="openAddDialog()">
       <tui-icon icon="@tui.circle-plus" />
       Thêm bài học
     </button>
@@ -13,19 +17,19 @@
 
   <div class="lessons-card">
     <header>
-      <h1>📚 Danh sách bài học</h1>
-      <span>5 bài</span>
+      <h1>Danh sách bài học</h1>
+      <span>{{ rowData().length }} bài</span>
     </header>
 
     <ag-grid-angular
       class="ag-theme-quartz lessons-grid"
       [gridOptions]="gridOptions"
       [columnDefs]="columnDefs"
-      [rowData]="rowData"
+      [rowData]="rowData()"
     />
 
     <footer>
-      <strong>Hiển thị 5/5 bài</strong>
+      <strong>Hiển thị {{ rowData().length }} bài</strong>
       <p><i></i> ≥ 90 <i></i> ≥ 75 <i></i> &lt; 75</p>
     </footer>
   </div>

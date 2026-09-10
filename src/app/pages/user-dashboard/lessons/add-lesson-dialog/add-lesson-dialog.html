@@ -1,0 +1,78 @@
+<div class="dialog-header">
+  <div class="dialog-title">
+    <tui-icon icon="@tui.circle-plus" class="dialog-title__icon" />
+    <h2>Thêm bài học mới</h2>
+  </div>
+</div>
+
+<form class="dialog-body" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <!-- Chủ đề -->
+  <div class="form-field">
+    <label class="form-label" for="topicId">Chủ đề</label>
+    <select id="topicId" class="form-select" formControlName="topicId">
+      <option value="" disabled selected>
+        {{ isLoadingTopics() ? 'Đang tải...' : 'Chọn chủ đề...' }}
+      </option>
+      @for (topic of topics(); track topic.id) {
+        <option [value]="topic.id">{{ topic.name }}</option>
+      }
+    </select>
+    @if (form.controls.topicId.invalid && form.controls.topicId.touched) {
+      <span class="field-error">Vui lòng chọn chủ đề.</span>
+    }
+  </div>
+
+  <!-- Tiêu đề bài học -->
+  <div class="form-field">
+    <label class="form-label" for="title">Tiêu đề bài học</label>
+    <input
+      id="title"
+      type="text"
+      class="form-input"
+      formControlName="title"
+      placeholder="VD: The Future of Renewable Energy"
+    />
+    @if (form.controls.title.invalid && form.controls.title.touched) {
+      @if (form.controls.title.errors?.['required']) {
+        <span class="field-error">Tiêu đề là bắt buộc.</span>
+      } @else if (form.controls.title.errors?.['minlength']) {
+        <span class="field-error">Tiêu đề tối thiểu 5 ký tự.</span>
+      }
+    }
+  </div>
+
+  <!-- Đoạn văn -->
+  <div class="form-field">
+    <div class="form-label-row">
+      <label class="form-label" for="passage">Đoạn văn tiếng Anh</label>
+      <small class="word-count">{{ wordCount() }} từ</small>
+    </div>
+    <textarea
+      id="passage"
+      class="form-textarea"
+      formControlName="passage"
+      placeholder="Nhập đoạn văn tiếng Anh để tạo bài luyện tập..."
+    ></textarea>
+    @if (form.controls.passage.invalid && form.controls.passage.touched) {
+      @if (form.controls.passage.errors?.['required']) {
+        <span class="field-error">Đoạn văn là bắt buộc.</span>
+      } @else if (form.controls.passage.errors?.['minlength']) {
+        <span class="field-error">Đoạn văn quá ngắn (tối thiểu 20 ký tự).</span>
+      }
+    }
+  </div>
+
+  <!-- Actions -->
+  <div class="dialog-actions">
+    <button type="button" class="btn btn--cancel" (click)="close()">Hủy</button>
+    <button type="submit" class="btn btn--submit" [disabled]="isSubmitting()">
+      @if (isSubmitting()) {
+        <tui-icon icon="@tui.loader-circle" class="spin" />
+        Đang tạo...
+      } @else {
+        <tui-icon icon="@tui.circle-check" />
+        Thêm bài học
+      }
+    </button>
+  </div>
+</form>

@@ -1,0 +1,107 @@
+<section class="study-dialog" aria-label="Luyện đọc bài học">
+  <header class="study-header">
+    <div class="study-heading">
+      <span class="study-heading__icon"><tui-icon icon="@tui.book-open" /></span>
+      <div>
+        <span class="study-heading__eyebrow">{{ lesson.topic }}</span>
+        <h2>{{ lesson.title }}</h2>
+      </div>
+    </div>
+
+    <div class="study-header__actions">
+      <span class="keyboard-tip">Phím cách: phát / tạm dừng</span>
+      <button type="button" class="icon-button" title="Đóng" (click)="close()">
+        <tui-icon icon="@tui.x" />
+      </button>
+    </div>
+  </header>
+
+  <div class="study-layout">
+    <main class="reader-panel">
+      <div class="reader-panel__label">
+        <span>Nội dung luyện đọc</span>
+        <span class="live-status" [class.live-status--playing]="isPlaying()">
+          <i></i>{{ isPlaying() ? 'Đang cuộn' : 'Sẵn sàng' }}
+        </span>
+      </div>
+
+      <div #readingViewport class="reader-viewport">
+        <div
+          class="reader-copy"
+          [class.reader-copy--mirrored]="isMirrored()"
+          [style.font-size.px]="fontSize()"
+        >
+          @if (lesson.rawText) {
+            {{ lesson.rawText }}
+          } @else {
+            <span class="reader-copy__empty">Bài học chưa có nội dung để luyện đọc.</span>
+          }
+        </div>
+      </div>
+    </main>
+
+    <aside class="reader-controls">
+      <div class="controls-heading">
+        <span>Điều khiển</span>
+        <small>Tùy chỉnh nhịp đọc của bạn</small>
+      </div>
+
+      <label class="control-field">
+        <span class="control-field__label">
+          <span>Tốc độ cuộn</span>
+          <strong>{{ speed() }}</strong>
+        </span>
+        <input
+          type="range"
+          min="15"
+          max="100"
+          step="5"
+          [value]="speed()"
+          (input)="updateSpeed($event)"
+        />
+        <small>Chậm <span>Nhanh</span></small>
+      </label>
+
+      <label class="control-field">
+        <span class="control-field__label">
+          <span>Cỡ chữ</span>
+          <strong>{{ fontSize() }}px</strong>
+        </span>
+        <input
+          type="range"
+          min="22"
+          max="64"
+          step="1"
+          [value]="fontSize()"
+          (input)="updateFontSize($event)"
+        />
+        <small>Nhỏ <span>Lớn</span></small>
+      </label>
+
+      <button
+        type="button"
+        class="mirror-toggle"
+        [class.mirror-toggle--active]="isMirrored()"
+        [attr.aria-pressed]="isMirrored()"
+        (click)="toggleMirror()"
+      >
+        <span class="mirror-toggle__switch"><i></i></span>
+        <span>
+          <strong>Lật gương</strong>
+          <small>Dùng với kính teleprompter</small>
+        </span>
+      </button>
+
+      <div class="controls-actions">
+        <button type="button" class="secondary-button" (click)="restart()">
+          <tui-icon icon="@tui.rotate-ccw" />
+          Về đầu
+        </button>
+        <button type="button" class="play-button" (click)="togglePlayback()">
+          <tui-icon [icon]="isPlaying() ? '@tui.pause' : '@tui.play'" />
+          {{ isPlaying() ? 'Tạm dừng' : 'Bắt đầu đọc' }}
+        </button>
+      </div>
+    </aside>
+  </div>
+</section>

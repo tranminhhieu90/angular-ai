@@ -1,6 +1,7 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TuiIcon } from '@taiga-ui/core';
+import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
 import { AuthService } from '@/app/core/api/auth.service';
 import { LessonService } from '@/app/core/api/lesson.service';
 import { UserStatsService } from '@/app/core/api/user-stats.service';
@@ -12,12 +13,13 @@ interface Topic {
 }
 
 @Component({
-  selector: 'app-create-lesson',
+  selector: 'app-add-lesson-dialog',
   imports: [TuiIcon, ReactiveFormsModule],
-  templateUrl: './create-lesson.html',
-  styleUrl: './create-lesson.scss',
+  templateUrl: './add-lesson-dialog.html',
+  styleUrl: './add-lesson-dialog.scss',
 })
-export class CreateLessonComponent implements OnInit {
+export class AddLessonDialogComponent implements OnInit {
+  private readonly context = inject(POLYMORPHEUS_CONTEXT);
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly lessonService = inject(LessonService);
@@ -43,20 +45,8 @@ export class CreateLessonComponent implements OnInit {
     this.loadTopics();
   }
 
-  private loadTopics(): void {
-    this.isLoadingTopics.set(true);
-    this.userStatsService.getTopic().subscribe({
-      next: (data: any) => {
-        // API có thể trả về mảng trực tiếp hoặc { data: [...] }
-        const list = Array.isArray(data) ? data : (data?.data ?? []);
-        this.topics.set(list);
-        this.isLoadingTopics.set(false);
-      },
-      error: (err) => {
-        console.error('Lỗi khi tải danh sách topic:', err);
-        this.isLoadingTopics.set(false);
-      },
-    });
+  close(): void {
+    this.context['$implicit'].complete();
   }
 
   onSubmit(): void {
@@ -89,6 +79,7 @@ export class CreateLessonComponent implements OnInit {
           this.isSubmitting.set(false);
           this.form.reset();
           this.toast.success('Tạo bài học thành công!');
+          this.context['$implicit'].complete();
         },
         error: (error) => {
           this.isSubmitting.set(false);
@@ -96,5 +87,20 @@ export class CreateLessonComponent implements OnInit {
           this.toast.error(message);
         },
       });
+  }
+
+  private loadTopics(): void {
+    this.isLoadingTopics.set(true);
+    this.userStatsService.getTopic().subscribe({
+      next: (data: any) => {
+        const list = Array.isArray(data) ? data : (data?.data ?? []);
+        this.topics.set(list);
+        this.isLoadingTopics.set(false);
+      },
+      error: (err) => {
+        console.error('Lỗi khi tải danh sách topic:', err);
+        this.isLoadingTopics.set(false);
+      },
+    });
   }
 }
