@@ -1,0 +1,59 @@
+:host {
+  display: block;
+  padding: 32px 28px;
+  background: #f4fbef;
+  min-height: calc(100vh - 6rem);
+}
+
+.grape-seed-page {
+  max-width: 1100px;
+}
+
+.state-text {
+  color: #5a8a5e;
+  font-size: 15px;
+  font-weight: 600;
+
+  &--error {
+    color: #a0341a;
+  }
+}
+
+.units-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.unit-card {
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+  }
+
+  &__img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__title {
+    margin: 0;
+    padding: 10px 12px;
+    font-size: 13px;
+    font-weight: 800;
+    color: #1a3a1c;
+    text-align: center;
+    line-height: 1.3;
+  }
+}

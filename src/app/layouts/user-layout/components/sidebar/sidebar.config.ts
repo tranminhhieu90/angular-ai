@@ -15,4 +15,5 @@ export const SIDEBAR_MENU: SidebarItem[] = [
     soft: true,
   },
   { label: 'Danh sách bài', icon: '@tui.library-big', link: '/user-dashboard/lessons' },
+  { label: 'GrapeSeed', icon: '@tui.grape', link: '/user-dashboard/grape-seed' },
 ];

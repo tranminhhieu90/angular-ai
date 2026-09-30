@@ -1,0 +1,23 @@
+<div class="grape-seed-page">
+  @if (isLoading()) {
+    <p class="state-text">Đang tải...</p>
+  } @else if (error()) {
+    <p class="state-text state-text--error">{{ error() }}</p>
+  } @else if (units().length === 0) {
+    <p class="state-text">Bạn chưa có unit để học.</p>
+  } @else {
+    <div class="units-grid">
+      @for (unit of units(); track unit.id) {
+        <div class="unit-card">
+          <img
+            class="unit-card__img"
+            [src]="unit.thumbnail_url || 'assets/images/unit-placeholder.png'"
+            [alt]="unit.name"
+            loading="lazy"
+          />
+          <p class="unit-card__title">{{ unit.name }}</p>
+        </div>
+      }
+    </div>
+  }
+</div>

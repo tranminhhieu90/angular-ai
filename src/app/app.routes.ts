@@ -83,6 +83,14 @@ export const routes: Routes = [
           import('./pages/user-dashboard/lessons/lessons').then((m) => m.LessonsComponent),
         title: 'Danh sách bài | Wapple Engish',
       },
+      {
+        path: 'grape-seed',
+        loadComponent: () =>
+          import('./pages/user-dashboard/grape-seed/grape-seed.component').then(
+            (m) => m.GrapeSeedComponent,
+          ),
+        title: 'GrapeSeed | Wapple Engish',
+      },
     ],
   },
   {

@@ -1,13 +1,13 @@
 import { AuthService } from '@/app/core/api/auth.service';
 import { LessonDto, LessonService, LessonsResponse } from '@/app/core/api/lesson.service';
 import { ToastService } from '@/app/core/services/toast.service';
-import { Component, inject, Injector, OnInit, signal } from '@angular/core';
-import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community';
+import { Component, computed, inject, Injector, OnInit, signal } from '@angular/core';
 import { TuiDialogService, TuiIcon } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
-import { LessonActionsCellComponent } from './lesson-actions-cell/lesson-actions-cell';
+import { AgGridAngular } from 'ag-grid-angular';
+import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community';
 import { AddLessonDialogComponent } from './add-lesson-dialog/add-lesson-dialog';
+import { LessonActionsCellComponent } from './lesson-actions-cell/lesson-actions-cell';
 
 interface Lesson {
   id: number;
@@ -32,7 +32,18 @@ export class LessonsComponent implements OnInit {
   private readonly dialogs = inject(TuiDialogService);
   private readonly injector = inject(Injector);
 
-  readonly rowData = signal<Lesson[]>([]);
+  readonly allData = signal<Lesson[]>([]);
+  readonly pageIndex = signal(0);
+  readonly pageSize = 10;
+
+  readonly totalPages = computed(() =>
+    Math.max(1, Math.ceil(this.allData().length / this.pageSize)),
+  );
+
+  readonly rowData = computed(() => {
+    const start = this.pageIndex() * this.pageSize;
+    return this.allData().slice(start, start + this.pageSize);
+  });
 
   readonly columnDefs: ColDef<Lesson>[] = [
     {
@@ -119,8 +130,8 @@ export class LessonsComponent implements OnInit {
       .subscribe({
         next: (response: LessonsResponse) => {
           const lessons = response?.data ?? [];
-
-          this.rowData.set(lessons.map((lesson) => this.mapLesson(lesson)));
+          this.allData.set(lessons.map((lesson) => this.mapLesson(lesson)));
+          this.pageIndex.set(0);
         },
         error: (error) => {
           const message = error?.error?.message || 'Không thể tải danh sách bài học.';
