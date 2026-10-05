@@ -8,16 +8,89 @@
   } @else {
     <div class="units-grid">
       @for (unit of units(); track unit.id) {
-        <div class="unit-card">
+        <button
+          type="button"
+          class="unit-card"
+          [class.unit-card--selected]="selectedUnit()?.id === unit.id"
+          [attr.aria-pressed]="selectedUnit()?.id === unit.id"
+          (click)="selectUnit(unit)"
+        >
           <img
             class="unit-card__img"
             [src]="unit.thumbnail_url || 'assets/images/unit-placeholder.png'"
             [alt]="unit.name"
             loading="lazy"
           />
-          <p class="unit-card__title">{{ unit.name }}</p>
-        </div>
+          <span class="unit-card__title">{{ unit.name }}</span>
+        </button>
       }
     </div>
+
+    @if (selectedUnit(); as unit) {
+      <section class="videos-section" aria-live="polite">
+        <div class="videos-section__heading">
+          <div>
+            <span>Video bài học</span>
+            <h2>{{ unit.name }}</h2>
+          </div>
+          @if (!isLoadingVideos() && !videoError()) {
+            <strong>{{ videos().length }} video</strong>
+          }
+        </div>
+
+        @if (isLoadingVideos()) {
+          <p class="state-text">Đang tải video...</p>
+        } @else if (videoError()) {
+          <p class="state-text state-text--error">{{ videoError() }}</p>
+        } @else if (videos().length === 0) {
+          <p class="state-text">Unit này chưa có video.</p>
+        } @else {
+          <div class="videos-grid">
+            @for (video of videos(); track video.id) {
+              <button type="button" class="video-card" (click)="openVideo(video)">
+                <span
+                  class="video-card__preview"
+                  [style.background-image]="
+                    video.thumbnail_url ? 'url(' + video.thumbnail_url + ')' : null
+                  "
+                >
+                  <span class="video-card__play" aria-hidden="true"></span>
+                  @if (video.duration) {
+                    <span class="video-card__duration">{{ formatDuration(video.duration) }}</span>
+                  }
+                </span>
+                <span class="video-card__title">{{ video.title }}</span>
+              </button>
+            }
+          </div>
+        }
+      </section>
+    }
   }
 </div>
+
+@if (activeVideo(); as video) {
+  <div
+    class="video-player"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="video.title"
+    (click)="closeVideo()"
+  >
+    <button type="button" class="video-player__close" aria-label="Đóng video" (click)="closeVideo()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+
+    <div class="video-player__content" (click)="$event.stopPropagation()">
+      <video
+        class="video-player__video"
+        [src]="video.url"
+        [poster]="video.thumbnail_url || ''"
+        controls
+        autoplay
+        playsinline
+      ></video>
+      <p class="video-player__title">{{ video.title }}</p>
+    </div>
+  </div>
+}
