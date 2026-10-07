@@ -67,18 +67,16 @@ export class CreateLessonComponent implements OnInit {
 
     this.isSubmitting.set(true);
     const formValue = this.form.getRawValue();
-    const userId = Number(this.authService.currentUser()?.id);
     const topic = this.topics().find((item) => String(item.id) === String(formValue.topicId));
 
-    if (!Number.isFinite(userId) || !topic) {
+    if (!topic) {
       this.isSubmitting.set(false);
-      this.toast.error('Không thể xác định người dùng hoặc chủ đề đã chọn.');
+      this.toast.error('Không thể xác định chủ đề đã chọn.');
       return;
     }
 
     this.lessonService
       .createLesson({
-        userId,
         title: formValue.title.trim(),
         topic: topic.name,
         rawText: formValue.passage.trim(),

@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Injector } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
-import { TuiIcon } from '@taiga-ui/core';
+import { TuiDialogService, TuiIcon } from '@taiga-ui/core';
+import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { PopupService } from '@/app/core/services/popup.service';
 import {
   StudyLessonDialogComponent,
@@ -89,6 +90,8 @@ export type LessonRow = StudyLessonDialogData & { id: number; title: string };
 })
 export class LessonActionsCellComponent implements ICellRendererAngularComp {
   private readonly popup = inject(PopupService);
+  private readonly dialogs = inject(TuiDialogService);
+  private readonly injector = inject(Injector);
   private lesson?: LessonRow;
   private gridContext?: { onLessonDeleted?: () => void };
 
@@ -106,13 +109,13 @@ export class LessonActionsCellComponent implements ICellRendererAngularComp {
   openStudyPopup(): void {
     if (!this.lesson) return;
 
-    this.popup.open<StudyLessonDialogComponent, StudyLessonDialogData>(StudyLessonDialogComponent, {
-      size: 'fullscreen',
-      data: this.lesson,
-      height: 'calc(100vh - 32px)',
-      autoFocus: false,
-      panelClass: 'study-lesson-popup-panel',
-    });
+    this.dialogs
+      .open(new PolymorpheusComponent(StudyLessonDialogComponent, this.injector), {
+        size: 'fullscreen',
+        dismissible: false,
+        data: this.lesson,
+      })
+      .subscribe();
   }
 
   openDeleteDialog(): void {

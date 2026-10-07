@@ -114,22 +114,14 @@ export class LessonsComponent implements OnInit {
   }
 
   loadLessons(title?: string, topic?: string): void {
-    const userId = Number(this.authService.currentUser()?.id);
-
-    if (!Number.isFinite(userId)) {
-      this.toast.error('Không thể xác định người dùng hiện tại.');
-      return;
-    }
-
     this.lessonService
       .getLessons({
-        userId,
         title: title?.trim() || undefined,
         topic: topic?.trim() || undefined,
       })
       .subscribe({
         next: (response: LessonsResponse) => {
-          const lessons = response?.data ?? [];
+          const lessons = response?.data.items ?? [];
           this.allData.set(lessons.map((lesson) => this.mapLesson(lesson)));
           this.pageIndex.set(0);
         },

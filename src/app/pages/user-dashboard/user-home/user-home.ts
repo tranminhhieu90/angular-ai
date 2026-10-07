@@ -21,13 +21,24 @@ import { UserStatsService } from '@/app/core/api/user-stats.service';
 export class UserHomeComponent implements OnInit {
   private readonly userStatsService = inject(UserStatsService);
   ngOnInit(): void {
-    this.getTopic();
+    this.getStatsStreak();
+    this.getStatsDashboard();
   }
 
-  getTopic() {
-    this.userStatsService.getTopic().subscribe({
+  getStatsStreak() {
+    this.userStatsService.getStatsStreak().subscribe({
       next: (res) => {
         console.log('ewew', res);
+      },
+      error: (err) => {
+        console.log('err', err);
+      },
+    });
+  }
+  getStatsDashboard() {
+    this.userStatsService.getStatsDashboard().subscribe({
+      next: (res) => {
+        console.log('stats', res);
       },
       error: (err) => {
         console.log('err', err);

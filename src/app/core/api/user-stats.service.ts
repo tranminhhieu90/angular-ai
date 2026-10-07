@@ -8,6 +8,12 @@ import { BaseApiService } from './base-api.service';
 export class UserStatsService extends BaseApiService {
   protected override readonly serviceName = 'base' as const;
   getTopic(params: any = {}): Observable<any> {
-    return this.get<any>('stats/topics');
+    return this.get<any>('lessons/topics');
+  }
+  getStatsDashboard(params: any = {}): Observable<any> {
+    return this.get<any>('stats/dashboard');
+  }
+  getStatsStreak(params: any = {}): Observable<any> {
+    return this.get<any>('stats/streak/recalculate');
   }
 }

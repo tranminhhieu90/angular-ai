@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { BaseApiService } from './base-api.service';
 
 export interface CreateLessonPayload {
-  userId: number;
   title: string;
   topic: string;
   rawText: string;
@@ -14,7 +13,6 @@ export interface CreateLessonPayload {
 export interface GetLessonsParams {
   title?: string;
   topic?: string;
-  userId: number;
 }
 
 export interface LessonDto {
@@ -30,7 +28,11 @@ export interface LessonDto {
   readingScore?: number;
 }
 
-export type LessonsResponse = { data: LessonDto[] };
+export type LessonsResponse = {
+  data: {
+    items: LessonDto[];
+  };
+};
 
 @Injectable({ providedIn: 'root' })
 export class LessonService extends BaseApiService {
@@ -46,7 +48,7 @@ export class LessonService extends BaseApiService {
   }
 
   getLessons(params: GetLessonsParams): Observable<LessonsResponse> {
-    let queryParams = new HttpParams().set('userId', String(params.userId));
+    let queryParams = new HttpParams();
 
     if (params.title) queryParams = queryParams.set('title', params.title);
     if (params.topic) queryParams = queryParams.set('topic', params.topic);
