@@ -108,12 +108,11 @@ export class LessonActionsCellComponent implements ICellRendererAngularComp {
 
   openStudyPopup(): void {
     if (!this.lesson) return;
-
     this.dialogs
       .open(new PolymorpheusComponent(StudyLessonDialogComponent, this.injector), {
-        size: 'fullscreen',
+        size: 'auto',
         dismissible: false,
-        data: this.lesson,
+        data: { id: this.lesson.id },
       })
       .subscribe();
   }

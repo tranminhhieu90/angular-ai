@@ -26,6 +26,18 @@ export interface LessonDto {
   reading?: number;
   writingScore?: number;
   readingScore?: number;
+  lessonLines?: LessonLineDto[];
+}
+
+export interface LessonLineDto {
+  id: number;
+  lessonId: number;
+  lineIndex: number;
+  content: string;
+  wordCount: number;
+  lastAnswer: string | null;
+  lineScore: number | null;
+  wordResults: unknown;
 }
 
 export type LessonsResponse = {
@@ -62,6 +74,14 @@ export class LessonService extends BaseApiService {
     });
   }
 
+  getLessonDetail(lessonId: number): Observable<LessonDto | { data: LessonDto }> {
+    return this.http.get<LessonDto | { data: LessonDto }>(`${this.baseUrl}/lessons/${lessonId}`, {
+      headers: {
+        Accept: '*/*',
+        'Accept-Language': 'en',
+      },
+    });
+  }
   deleteLesson(id: number): Observable<unknown> {
     return this.http.delete<unknown>(`${this.baseUrl}/lessons/${id}`, {
       headers: {

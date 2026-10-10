@@ -1,1 +1,239 @@
-<h2>{{ lesson.title }}</h2>
+<!-- ═══ HEADER ═══ -->
+<header class="study-header">
+  <div class="flex items-center justify-between gap-3 mb-2">
+    <div class="flex items-center gap-3">
+      <tui-icon icon="@tui.star" class="study-header__star" />
+      <h2 class="m-0 text-lg font-black text-gray-900">{{ lessonIndex }}. {{ lessonTitle }}</h2>
+      <span class="badge badge--level"> Chủ đề: {{ topicName }}</span>
+    </div>
+  </div>
+
+  <nav class="study-tabs">
+    <button
+      class="study-tab"
+      [class.study-tab--active]="activeTab === 'dictation'"
+      (click)="activeTab = 'dictation'"
+    >
+      <tui-icon icon="@tui.pencil" />
+      Dictation (Chép chính tả)
+    </button>
+    <button
+      class="study-tab"
+      [class.study-tab--active]="activeTab === 'transcript'"
+      (click)="activeTab = 'transcript'"
+    >
+      <tui-icon icon="@tui.file-text" />
+      Full transcript (Bản đầy đủ)
+    </button>
+  </nav>
+</header>
+
+<!-- ═══ BODY ═══ -->
+<div class="study-body">
+  <!-- ── LEFT: Dictation Panel ── -->
+  @if (activeTab === 'dictation') {
+    <section class="flex flex-col gap-5 p-6 overflow-y-auto">
+      <!-- Sentence counter & options -->
+      <div class="flex items-center gap-4 flex-wrap">
+        <span class="text-sm font-bold text-green-800"
+          >Câu <strong class="font-black text-gray-900">{{ currentSentence }}</strong> /
+          {{ totalSentences }}</span
+        >
+        <label
+          class="inline-flex items-center gap-1.5 text-xs font-bold text-green-800 cursor-pointer"
+        >
+          <input
+            type="checkbox"
+            [(ngModel)]="isRepeat"
+            class="accent-green-600 w-4 h-4 cursor-pointer"
+          />
+          Lặp lại câu (Repeat)
+        </label>
+      </div>
+
+      <!-- Audio Player -->
+      <div class="audio-player">
+        <button class="audio-player__play" (click)="togglePlay()">
+          <tui-icon [icon]="isPlaying ? '@tui.pause' : '@tui.play'" />
+        </button>
+        <div class="audio-player__track">
+          <div class="audio-player__progress" [style.width.%]="progressPercent"></div>
+        </div>
+        <button class="audio-player__icon-btn" (click)="toggleMute()">
+          <tui-icon [icon]="isMuted ? '@tui.volume-x' : '@tui.volume-2'" />
+        </button>
+      </div>
+
+      <p class="m-0 text-xs text-green-600/60 font-semibold">
+        Bấm <kbd class="kbd">Space</kbd> để Dừng/Phát
+        <span class="inline-block w-7"></span>
+      </p>
+
+      <!-- Dictation Input -->
+      <div class="flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-bold text-green-800"
+            >Nghe và gõ lại câu:
+            <small class="font-semibold text-green-600/50">(Bảng tiếng Anh)</small></span
+          >
+          <button class="link-btn" (click)="resetInput()">
+            <tui-icon icon="@tui.rotate-ccw" />
+            Gõ lại từ đầu
+          </button>
+        </div>
+        <div class="dictation-input-box">
+          <textarea
+            class="dictation-textarea"
+            [(ngModel)]="userInput"
+            placeholder="Gõ lại câu bạn nghe được..."
+            (keydown.enter)="checkAnswer()"
+            rows="3"
+          ></textarea>
+          <div class="flex gap-2 justify-end px-3 pb-2.5">
+            <button class="icon-circle" title="Gợi ý">
+              <tui-icon icon="@tui.lightbulb" />
+            </button>
+            <button class="icon-circle icon-circle--record" title="Ghi âm">
+              <tui-icon icon="@tui.mic" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback -->
+      @if (answerStatus) {
+        <div
+          class="feedback"
+          [class.feedback--correct]="answerStatus === 'correct'"
+          [class.feedback--wrong]="answerStatus === 'wrong'"
+        >
+          @if (answerStatus === 'correct') {
+            <span class="text-sm font-extrabold text-green-900">You are correct! 🎉</span>
+            <button class="btn-note ml-auto">+ note</button>
+            <button class="btn-next" (click)="goNext()">
+              Next (Câu tiếp theo)
+              <tui-icon icon="@tui.arrow-right" />
+            </button>
+          } @else {
+            <span class="text-sm font-extrabold text-red-800">Chưa đúng, thử lại nhé!</span>
+            <button class="btn-retry ml-auto" (click)="retryAnswer()">
+              <tui-icon icon="@tui.rotate-ccw" />
+              Thử lại
+            </button>
+          }
+        </div>
+      }
+
+      <!-- Vietnamese Translation -->
+      <div class="section-card">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="section-label">DỊCH NGHĨA TIẾNG VIỆT</span>
+        </div>
+        <p class="m-0 text-base font-bold text-gray-900 leading-relaxed">
+          {{ vietnameseTranslation }}
+        </p>
+      </div>
+
+      <!-- Pronunciation & Vocabulary -->
+      <div class="flex flex-col gap-2.5">
+        <span class="section-label">PHÁT ÂM & TỪ VỰNG (CLICK VÀO TỪ ĐỂ TRA NHANH)</span>
+        <div class="flex flex-wrap gap-2">
+          @for (word of sentenceWords; track $index) {
+            <button class="word-chip" (click)="lookupWord(word)">{{ word }}</button>
+          }
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- ── RIGHT: Transcript Panel ── -->
+  @if (activeTab === 'transcript') {
+    <aside class="transcript-panel">
+      <div class="flex items-center justify-between px-5 p-4 border-b border-green-200">
+        <div class="flex items-center gap-2 text-sm text-gray-900">
+          <span class="w-2 h-2 rounded-full bg-red-500"></span>
+          <strong>Transcript Song Ngữ</strong>
+        </div>
+        <div class="flex items-center justify-between px-5 py-3.5">
+          <label
+            class="inline-flex items-center gap-1.5 text-xs font-bold text-green-800 cursor-pointer"
+          >
+            <input
+              type="checkbox"
+              [(ngModel)]="autoScroll"
+              class="accent-green-600 w-4 h-4 cursor-pointer"
+            />
+            Tự động cuộn theo audio (Auto scroll)
+          </label>
+        </div>
+      </div>
+
+      <div class="transcript-workspace">
+        <section class="current-sentence" aria-live="polite">
+          @if (currentLessonLine; as line) {
+            <div class="current-sentence__status">
+              <span class="current-sentence__pulse" [class.is-playing]="isPlaying"></span>
+              {{ isPlaying ? 'Đang phát' : 'Câu hiện tại' }}
+            </div>
+
+            <div class="current-sentence__content">
+              <p class="current-sentence__en">{{ line.content }}</p>
+              <p class="current-sentence__vi">
+                Câu {{ line.lineIndex + 1 }} • {{ line.wordCount }} từ
+              </p>
+            </div>
+
+            <div class="current-sentence__navigation">
+              <button
+                class="current-sentence__nav-button"
+                type="button"
+                title="Câu trước"
+                [disabled]="currentSentence === 1"
+                (click)="goPrevious()"
+              >
+                <tui-icon icon="@tui.arrow-left" />
+              </button>
+              <span>{{ currentSentence }} / {{ totalSentences }}</span>
+              <button
+                class="current-sentence__nav-button"
+                type="button"
+                title="Câu tiếp theo"
+                [disabled]="currentSentence === totalSentences"
+                (click)="goNext()"
+              >
+                <tui-icon icon="@tui.arrow-right" />
+              </button>
+            </div>
+          }
+        </section>
+
+        <div class="transcript-list">
+          @for (line of lessonLines; track line.id) {
+            <button
+              class="transcript-item"
+              [class.transcript-item--active]="$index === currentSentence - 1"
+              (click)="jumpToSentence($index + 1)"
+            >
+              <span class="transcript-item__play">
+                <tui-icon
+                  [icon]="$index === currentSentence - 1 && isPlaying ? '@tui.pause' : '@tui.play'"
+                />
+              </span>
+              <div class="flex-1 min-w-0">
+                <p class="transcript-item__en">{{ line.content }}</p>
+                <p class="m-0 mt-0.5 text-xs font-semibold text-green-600/50 leading-snug">
+                  Câu {{ line.lineIndex + 1 }} • {{ line.wordCount }} từ
+                </p>
+              </div>
+              @if (line.lineScore !== null) {
+                <span class="text-xs font-bold text-green-500 whitespace-nowrap mt-0.5 shrink-0">
+                  {{ line.lineScore }} điểm
+                </span>
+              }
+            </button>
+          }
+        </div>
+      </div>
+    </aside>
+  }
+</div>

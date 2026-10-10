@@ -69,14 +69,14 @@ export const routes: Routes = [
           import('./pages/user-dashboard/user-home/user-home').then((m) => m.UserHomeComponent),
         title: 'Home | Wapple Engish',
       },
-      {
-        path: 'create-lesson',
-        loadComponent: () =>
-          import('./pages/user-dashboard/create-lesson/create-lesson').then(
-            (m) => m.CreateLessonComponent,
-          ),
-        title: 'Tạo bài học | Wapple Engish',
-      },
+      // {
+      //   path: 'create-lesson',
+      //   loadComponent: () =>
+      //     import('./pages/user-dashboard/create-lesson/create-lesson').then(
+      //       (m) => m.CreateLessonComponent,
+      //     ),
+      //   title: 'Tạo bài học | Wapple Engish',
+      // },
       {
         path: 'lessons',
         loadComponent: () =>

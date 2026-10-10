@@ -1,9 +1,622 @@
+/* ═══════════════════════════════════════════════
+   Study Lesson Dialog – SCSS (Tailwind-optimized)
+   Only custom visual styles that Tailwind can't handle
+   ═══════════════════════════════════════════════ */
+
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  width: 70vw;
+  max-width: calc(100vw - 32px);
+  height: 100%;
+  padding-top: 25px;
 }
 
-h2 {
-  margin: 0;
-  font-size: 20px;
+/* ── HEADER ── */
+.study-header {
+  flex-wrap: wrap;
+  padding: 18px 24px;
+  border-bottom: 2px solid #e4f0e2;
+  background: linear-gradient(135deg, #f8fff5, #eef9ea);
+}
+
+.study-header__star {
+  font-size: 22px;
+  color: #f5b731;
+  filter: drop-shadow(0 1px 2px rgba(245, 183, 49, 0.35));
+}
+
+/* ── Badges ── */
+.badge--level {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: #d4f5e0;
+  color: #1d8b48;
+  border: 1px solid #a8e6c3;
+  font-size: 12px;
   font-weight: 800;
+}
+
+.badge-count {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #eef7ea;
+  color: #6a926a;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ── TABS ── */
+.study-tabs {
+  display: inline-flex;
+  gap: 4px;
+  background: #edf5ea;
+  border-radius: 14px;
+  padding: 4px 8px;
+}
+
+.study-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: #5a8058;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+
+  tui-icon {
+    font-size: 16px;
+  }
+  &:hover {
+    background: rgba(255, 255, 255, 0.6);
+    color: #2a6632;
+  }
+
+  &--active {
+    background: #fff;
+    color: #1d8b48;
+    box-shadow: 0 2px 8px rgba(30, 128, 68, 0.12);
+  }
+}
+
+/* ── BODY GRID ── */
+.study-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── AUDIO PLAYER ── */
+.audio-player {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: #1e2a24;
+  color: #fff;
+}
+
+.audio-player__play {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: #2fa557;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+  tui-icon {
+    font-size: 18px;
+  }
+  &:hover {
+    background: #26914c;
+  }
+}
+
+.audio-player__track {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: #3a4d3f;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.audio-player__progress {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #2fa557, #4dd67a);
+  transition: width 0.15s ease;
+}
+
+.audio-player__icon-btn {
+  border: none;
+  background: transparent;
+  color: #a3c7a3;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 4px;
+  &:hover {
+    color: #fff;
+  }
+}
+
+.audio-player__speed {
+  min-width: 32px;
+  height: 24px;
+  border: 1.5px solid #4a6a50;
+  border-radius: 8px;
+  background: transparent;
+  color: #a3c7a3;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  &:hover {
+    border-color: #2fa557;
+    color: #4dd67a;
+  }
+}
+
+/* kbd key */
+.kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1.5px solid #cddecf;
+  border-radius: 5px;
+  background: #f2f9f0;
+  color: #3d6d3d;
+  font-size: 11px;
+  font-weight: 800;
+  font-family: inherit;
+}
+
+/* ── DICTATION INPUT ── */
+.dictation-input-box {
+  border: 2px solid #d8efd8;
+  border-radius: 16px;
+  background: #f7fff3;
+  overflow: hidden;
+  transition:
+    border-color 0.18s,
+    box-shadow 0.18s;
+  &:focus-within {
+    border-color: #7ec98a;
+    box-shadow: 0 0 0 3px rgba(118, 184, 126, 0.16);
+  }
+}
+
+.dictation-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 14px 16px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #18351d;
+  font: 600 16px/1.6 inherit;
+  resize: none;
+  box-sizing: border-box;
+  &::placeholder {
+    color: #8ab98c;
+  }
+}
+
+/* ── Icon circle ── */
+.icon-circle {
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid #d8efd8;
+  border-radius: 50%;
+  background: #fff;
+  color: #5a8a5a;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  tui-icon {
+    font-size: 16px;
+  }
+  &:hover {
+    background: #eef7ea;
+    border-color: #b8dbb8;
+  }
+  &--record {
+    border-color: #f5c0c0;
+    color: #dc4b4b;
+    &:hover {
+      background: #fff2f2;
+    }
+  }
+  &--sm {
+    width: 28px;
+    height: 28px;
+    tui-icon {
+      font-size: 13px;
+    }
+  }
+}
+
+/* ── Link btn ── */
+.link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #2fa557;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  tui-icon {
+    font-size: 14px;
+  }
+  &:hover {
+    color: #1d8b48;
+    text-decoration: underline;
+  }
+}
+
+/* ── FEEDBACK ── */
+.feedback {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-radius: 14px;
+  animation: fadeSlideUp 0.25s ease-out;
+  &--correct {
+    background: #e8fce8;
+    border: 1.5px solid #a8e6c3;
+  }
+  &--wrong {
+    background: #fef2f0;
+    border: 1.5px solid #f5c4c0;
+  }
+}
+
+.btn-note {
+  padding: 4px 14px;
+  border: 1.5px solid #d8efd8;
+  border-radius: 10px;
+  background: #fff;
+  color: #3d6d3d;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  &:hover {
+    background: #f2fbf0;
+  }
+}
+
+.btn-next {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 22px;
+  border: none;
+  border-radius: 12px;
+  background: #2fa557;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  tui-icon {
+    font-size: 16px;
+  }
+  &:hover {
+    background: #26914c;
+  }
+}
+
+.btn-retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border: 1.5px solid #f5c4c0;
+  border-radius: 12px;
+  background: #fff;
+  color: #a83232;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  &:hover {
+    background: #fef2f0;
+  }
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 900;
+  color: #6a926a;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* ── Word chips ── */
+.word-chip {
+  padding: 6px 14px;
+  border: 1.5px solid #d8efd8;
+  border-radius: 10px;
+  background: #fff;
+  color: #18351d;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  &:hover {
+    background: #eef7ea;
+    border-color: #2fa557;
+    color: #1d8b48;
+    box-shadow: 0 2px 6px rgba(30, 128, 68, 0.12);
+  }
+}
+
+/* ═══ TRANSCRIPT PANEL ═══ */
+.transcript-panel {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  height: 500px;
+  max-height: 500px;
+  min-height: 0;
+  overflow: hidden;
+  background: #fbfff8;
+}
+
+.transcript-workspace {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.9fr) minmax(380px, 1.1fr);
+  grid-template-rows: minmax(0, 1fr);
+  align-items: stretch;
+  gap: 16px;
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  padding: 16px;
+}
+
+.current-sentence {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid #cfe3ce;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(77, 214, 122, 0.12), transparent 38%),
+    linear-gradient(145deg, #18351d, #102a18);
+  color: #fff;
+  box-shadow: 0 12px 30px rgba(24, 53, 29, 0.13);
+}
+
+.current-sentence__status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 18px;
+  color: #bde5c4;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.current-sentence__pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #7ca986;
+
+  &.is-playing {
+    background: #4dd67a;
+    box-shadow: 0 0 0 5px rgba(77, 214, 122, 0.14);
+    animation: sentencePulse 1.4s ease-in-out infinite;
+  }
+}
+
+.current-sentence__content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 32px 38px;
+  text-align: center;
+}
+
+.current-sentence__en {
+  margin: 0;
+  color: #f7fff8;
+  font-size: clamp(24px, 3vw, 38px);
+  font-weight: 800;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.current-sentence__vi {
+  margin: 0;
+  color: #a9cbb0;
+  font-size: clamp(15px, 1.6vw, 19px);
+  font-weight: 600;
+  line-height: 1.5;
+  text-wrap: balance;
+}
+
+.current-sentence__navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  min-height: 50px;
+  border-top: 1px solid rgba(191, 224, 196, 0.18);
+  color: #d3e7d6;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.current-sentence__nav-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #d3e7d6;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  tui-icon {
+    font-size: 17px;
+  }
+
+  &:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+.transcript-list {
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  border: 1px solid #d8e8d6;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.lang-toggle {
+  padding: 4px 14px;
+  border: 1.5px solid #d8efd8;
+  border-radius: 10px;
+  background: #fff;
+  color: #2fa557;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  &:hover {
+    background: #eef7ea;
+  }
+}
+
+.transcript-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 20px;
+  border: none;
+  border-left: 3px solid transparent;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover {
+    background: #f0faea;
+  }
+
+  &--active {
+    background: #e3f8e8;
+    border-left-color: #2fa557;
+    .transcript-item__en {
+      color: #1d8b48;
+      font-weight: 800;
+    }
+  }
+}
+
+.transcript-item__play {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  tui-icon {
+    font-size: 14px;
+    color: #5a8a5a;
+  }
+  .transcript-item--active & tui-icon {
+    color: #2fa557;
+  }
+}
+
+.transcript-item__en {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #2a4a2e;
+  line-height: 1.4;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sentencePulse {
+  50% {
+    box-shadow: 0 0 0 9px rgba(77, 214, 122, 0.04);
+  }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .study-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .transcript-workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(240px, 1fr);
+    overflow-y: auto;
+  }
+
+  .current-sentence {
+    height: auto;
+    min-height: 280px;
+  }
+
+  .transcript-list {
+    height: auto;
+    min-height: 320px;
+    overflow-y: auto;
+  }
 }

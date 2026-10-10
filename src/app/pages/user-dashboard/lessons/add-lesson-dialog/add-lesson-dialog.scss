@@ -187,6 +187,40 @@
   }
 }
 
+.ai-box {
+  display: grid;
+  gap: 12px;
+  padding: 16px 20px 18px;
+  border: 2px solid #d8efd8;
+  border-radius: 18px;
+  background: #f7fff3;
+  color: #102215;
+  font-size: 13px;
+}
+
+.ai-box__items {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+
+  div {
+    display: grid;
+    min-height: 72px;
+    place-items: center;
+    gap: 4px;
+    border: 1px solid #d8efd8;
+    border-radius: 18px;
+    background: #fff;
+  }
+
+  span {
+    font-size: 20px;
+  }
+
+  b {
+    font-size: 12px;
+  }
+}
 /* ── Spinner animation ── */
 @keyframes spin {
   to {
