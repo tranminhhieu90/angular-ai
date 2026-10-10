@@ -26,7 +26,6 @@ interface Lesson {
   styleUrl: './lessons.scss',
 })
 export class LessonsComponent implements OnInit {
-  private readonly authService = inject(AuthService);
   private readonly lessonService = inject(LessonService);
   private readonly toast = inject(ToastService);
   private readonly dialogs = inject(TuiDialogService);
