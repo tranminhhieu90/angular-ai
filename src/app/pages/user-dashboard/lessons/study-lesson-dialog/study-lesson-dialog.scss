@@ -380,6 +380,33 @@
   background: #fbfff8;
 }
 
+.transcript-play-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 7px 14px;
+  border: 1px solid #238d49;
+  border-radius: 8px;
+  background: #2fa557;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+
+  tui-icon {
+    font-size: 16px;
+  }
+
+  &:hover {
+    border-color: #1d783d;
+    background: #278d4b;
+  }
+}
+
 .transcript-workspace {
   display: grid;
   grid-template-columns: minmax(300px, 0.9fr) minmax(380px, 1.1fr);

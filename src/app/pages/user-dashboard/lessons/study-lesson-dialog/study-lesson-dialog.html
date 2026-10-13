@@ -12,7 +12,7 @@
     <button
       class="study-tab"
       [class.study-tab--active]="activeTab === 'dictation'"
-      (click)="activeTab = 'dictation'"
+      (click)="setActiveTab('dictation')"
     >
       <tui-icon icon="@tui.pencil" />
       Dictation (Chép chính tả)
@@ -20,7 +20,7 @@
     <button
       class="study-tab"
       [class.study-tab--active]="activeTab === 'transcript'"
-      (click)="activeTab = 'transcript'"
+      (click)="setActiveTab('transcript')"
     >
       <tui-icon icon="@tui.file-text" />
       Full transcript (Bản đầy đủ)
@@ -53,13 +53,13 @@
 
       <!-- Audio Player -->
       <div class="audio-player">
-        <button class="audio-player__play" (click)="togglePlay()">
+        <button type="button" class="audio-player__play" (click)="togglePlay()">
           <tui-icon [icon]="isPlaying ? '@tui.pause' : '@tui.play'" />
         </button>
         <div class="audio-player__track">
           <div class="audio-player__progress" [style.width.%]="progressPercent"></div>
         </div>
-        <button class="audio-player__icon-btn" (click)="toggleMute()">
+        <button type="button" class="audio-player__icon-btn" (click)="toggleMute()">
           <tui-icon [icon]="isMuted ? '@tui.volume-x' : '@tui.volume-2'" />
         </button>
       </div>
@@ -150,10 +150,15 @@
   @if (activeTab === 'transcript') {
     <aside class="transcript-panel">
       <div class="flex items-center justify-between px-5 p-4 border-b border-green-200">
-        <div class="flex items-center gap-2 text-sm text-gray-900">
-          <span class="w-2 h-2 rounded-full bg-red-500"></span>
-          <strong>Transcript Song Ngữ</strong>
-        </div>
+        <button
+          type="button"
+          class="transcript-play-button"
+          [attr.aria-label]="isTranscriptPlaying ? 'Dừng đọc toàn bài' : 'Đọc toàn bài'"
+          (click)="toggleTranscriptPlayback()"
+        >
+          <tui-icon [icon]="isTranscriptPlaying ? '@tui.pause' : '@tui.play'" />
+          {{ isTranscriptPlaying ? 'Dừng đọc' : 'Phát toàn bài' }}
+        </button>
         <div class="flex items-center justify-between px-5 py-3.5">
           <label
             class="inline-flex items-center gap-1.5 text-xs font-bold text-green-800 cursor-pointer"
@@ -173,7 +178,7 @@
           @if (currentLessonLine; as line) {
             <div class="current-sentence__status">
               <span class="current-sentence__pulse" [class.is-playing]="isPlaying"></span>
-              {{ isPlaying ? 'Đang phát' : 'Câu hiện tại' }}
+              {{ isTranscriptPlaying ? 'Đang phát toàn bài' : 'Câu hiện tại' }}
             </div>
 
             <div class="current-sentence__content">
@@ -211,12 +216,17 @@
           @for (line of lessonLines; track line.id) {
             <button
               class="transcript-item"
+              [attr.data-transcript-index]="$index + 1"
               [class.transcript-item--active]="$index === currentSentence - 1"
               (click)="jumpToSentence($index + 1)"
             >
               <span class="transcript-item__play">
                 <tui-icon
-                  [icon]="$index === currentSentence - 1 && isPlaying ? '@tui.pause' : '@tui.play'"
+                  [icon]="
+                    $index === currentSentence - 1 && isTranscriptPlaying
+                      ? '@tui.pause'
+                      : '@tui.play'
+                  "
                 />
               </span>
               <div class="flex-1 min-w-0">
