@@ -8,7 +8,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TuiDialogContext, TuiIcon } from '@taiga-ui/core';
+import { TuiButton, TuiDialogContext, TuiIcon } from '@taiga-ui/core';
 import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
 import { LessonDto, LessonLineDto, LessonService } from '@/app/core/api/lesson.service';
 import { ToastService } from '@/app/core/services/toast.service';
@@ -17,9 +17,21 @@ export interface StudyLessonDialogData {
   id: number;
 }
 
+interface AnswerWordFeedback {
+  text: string;
+  isCorrect: boolean;
+}
+
+type VoiceGender = 'male' | 'female' | 'unknown';
+
+const FEMALE_VOICE_PATTERN =
+  /aria|ava|catherine|emma|eva|female|fiona|hazel|heera|helena|jenny|karen|linda|moira|samantha|sabina|sonia|susan|tessa|veena|victoria|zira/i;
+const MALE_VOICE_PATTERN =
+  /alex|arthur|brian|christopher|daniel|david|eric|fred|george|guy|james|male|mark|oliver|richard|ryan|thomas/i;
+
 @Component({
   selector: 'app-study-lesson-dialog',
-  imports: [TuiIcon, FormsModule],
+  imports: [TuiIcon, TuiButton, FormsModule],
   templateUrl: './study-lesson-dialog.html',
   styleUrl: './study-lesson-dialog.scss',
 })
@@ -40,12 +52,15 @@ export class StudyLessonDialogComponent implements OnInit, OnDestroy {
   private progressTimer: number | null = null;
   private repeatTimer: number | null = null;
   private hasShownSpeechError = false;
+  private selectedVoice: SpeechSynthesisVoice | null = null;
   private readonly handleVoicesChanged = (): void => {
     this.voices = this.speechSynthesis?.getVoices() ?? [];
+    if (this.selectedVoice && !this.voices.includes(this.selectedVoice)) {
+      this.selectedVoice = null;
+    }
   };
 
   readonly lessonId = this.context.data.id;
-
   // ── Header
   lessonIndex = 1;
   lessonTitle = '';
@@ -61,18 +76,14 @@ export class StudyLessonDialogComponent implements OnInit, OnDestroy {
   isPlaying = false;
   isMuted = false;
   progressPercent = 0;
+  readonly playbackSpeeds = [0.5, 0.75, 1, 1.25, 1.5];
   playbackSpeed = 1;
+  isShowResult = false;
 
   // ── Input
   userInput = '';
   answerStatus: 'correct' | 'wrong' | null = null;
-
-  // ── Translation
-  vietnameseTranslation = '';
-  sentenceWords: string[] = [];
-
-  // ── Comments
-  commentCount = 106;
+  answerFeedback: AnswerWordFeedback[] = [];
 
   // ── Transcript
   autoScroll = true;
@@ -134,8 +145,6 @@ export class StudyLessonDialogComponent implements OnInit, OnDestroy {
             this.totalSentences = this.lessonLines.length;
             this.currentSentence = 1;
             this.stopSpeech();
-            this.updateSentenceWords();
-            this.updateTranslation();
           }
         }
       },
@@ -212,24 +221,18 @@ export class StudyLessonDialogComponent implements OnInit, OnDestroy {
 
   toggleMute(): void {
     this.isMuted = !this.isMuted;
+    this.restartCurrentSpeech();
+  }
 
-    const content = this.currentLessonLine?.content.trim();
-    if (!content || !this.currentUtterance) return;
-
-    const wasPlaying = this.isPlaying;
-    const resumeOffset = this.findWordStart(content, this.currentCharacterOffset);
-    this.cancelCurrentUtterance(true);
-    this.currentCharacterOffset = resumeOffset;
-    this.isPlaying = false;
-
-    if (wasPlaying) {
-      this.speak(content, resumeOffset);
-    }
+  setPlaybackSpeed(speed: number): void {
+    this.playbackSpeed = speed;
+    this.restartCurrentSpeech();
   }
 
   resetInput(): void {
     this.userInput = '';
     this.answerStatus = null;
+    this.answerFeedback = [];
   }
 
   checkAnswer(): void {
@@ -237,18 +240,27 @@ export class StudyLessonDialogComponent implements OnInit, OnDestroy {
     const current = this.currentLessonLine;
     if (!current) return;
 
-    const normalize = (s: string) =>
-      s
-        .trim()
-        .toLowerCase()
-        .replace(/[.!?,]/g, '');
-    this.answerStatus =
-      normalize(this.userInput) === normalize(current.content) ? 'correct' : 'wrong';
-  }
+    const expectedWords = current.content.trim().split(/\s+/);
+    const inputWords = this.userInput.trim().split(/\s+/);
+    const feedbackLength = Math.max(expectedWords.length, inputWords.length);
 
-  retryAnswer(): void {
-    this.userInput = '';
-    this.answerStatus = null;
+    this.answerFeedback = Array.from({ length: feedbackLength }, (_, index) => {
+      const expectedWord = expectedWords[index];
+      const inputWord = inputWords[index] ?? '';
+      const displayWord = expectedWord ?? inputWord;
+      const normalizedExpectedWord = this.normalizeWord(expectedWord ?? '');
+      const isCorrect =
+        normalizedExpectedWord.length > 0 &&
+        normalizedExpectedWord === this.normalizeWord(inputWord);
+
+      return {
+        text: isCorrect ? displayWord : this.maskWord(displayWord),
+        isCorrect,
+      };
+    });
+
+    const isCorrect = this.answerFeedback.every((word) => word.isCorrect);
+    this.answerStatus = isCorrect ? 'correct' : 'wrong';
   }
 
   goNext(): void {
@@ -256,8 +268,6 @@ export class StudyLessonDialogComponent implements OnInit, OnDestroy {
       this.stopSpeech();
       this.currentSentence++;
       this.resetInput();
-      this.updateSentenceWords();
-      this.updateTranslation();
     }
   }
 
@@ -266,8 +276,6 @@ export class StudyLessonDialogComponent implements OnInit, OnDestroy {
       this.stopSpeech();
       this.currentSentence--;
       this.resetInput();
-      this.updateSentenceWords();
-      this.updateTranslation();
     }
   }
 
@@ -275,15 +283,24 @@ export class StudyLessonDialogComponent implements OnInit, OnDestroy {
     this.stopSpeech();
     this.currentSentence = index;
     this.resetInput();
-    this.updateSentenceWords();
-    this.updateTranslation();
   }
 
-  lookupWord(word: string): void {
-    this.toast.info(`Tra từ: "${word}"`);
+  showResult(): void {
+    this.isShowResult = !this.isShowResult;
   }
 
   // ── Helpers
+  private normalizeWord(word: string): string {
+    return word
+      .toLowerCase()
+      .replace(/’/g, "'")
+      .replace(/[^a-z0-9']/g, '');
+  }
+
+  private maskWord(word: string): string {
+    return '*'.repeat(Math.max(this.normalizeWord(word).length, 1));
+  }
+
   private initializeSpeechSynthesis(): void {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
 
@@ -308,11 +325,11 @@ export class StudyLessonDialogComponent implements OnInit, OnDestroy {
 
     this.currentCharacterOffset = safeOffset;
 
-    utterance.lang = 'en-US';
     utterance.rate = this.playbackSpeed;
     utterance.pitch = 1;
     utterance.volume = this.isMuted ? 0 : 1;
-    utterance.voice = this.selectEnglishVoice();
+    utterance.voice = this.selectRandomVoice() ?? this.selectEnglishVoice();
+    utterance.lang = utterance.voice?.lang ?? 'en-US';
 
     utterance.onstart = () => {
       if (token !== this.playbackToken) return;
@@ -326,10 +343,7 @@ export class StudyLessonDialogComponent implements OnInit, OnDestroy {
       this.currentCharacterOffset = safeOffset + event.charIndex;
       this.progressPercent = Math.min(
         99,
-        Math.max(
-          this.progressPercent,
-          (this.currentCharacterOffset / content.length) * 100,
-        ),
+        Math.max(this.progressPercent, (this.currentCharacterOffset / content.length) * 100),
       );
       this.changeDetectorRef.markForCheck();
     };
@@ -436,9 +450,6 @@ export class StudyLessonDialogComponent implements OnInit, OnDestroy {
   private selectSentence(index: number): void {
     this.currentSentence = index;
     this.resetInput();
-    this.updateSentenceWords();
-    this.updateTranslation();
-
     if (this.autoScroll && this.playbackMode === 'transcript' && typeof window !== 'undefined') {
       window.requestAnimationFrame(() => {
         this.elementRef.nativeElement
@@ -477,8 +488,54 @@ export class StudyLessonDialogComponent implements OnInit, OnDestroy {
     return previousSpace < 0 ? 0 : previousSpace + 1;
   }
 
+  private restartCurrentSpeech(): void {
+    const content = this.currentLessonLine?.content.trim();
+    if (!content || !this.currentUtterance) return;
+
+    const wasPlaying = this.isPlaying;
+    const resumeOffset = this.findWordStart(content, this.currentCharacterOffset);
+    this.cancelCurrentUtterance(true);
+    this.currentCharacterOffset = resumeOffset;
+    this.isPlaying = false;
+
+    if (wasPlaying) {
+      this.speak(content, resumeOffset);
+    }
+  }
+
+  private selectRandomVoice(): SpeechSynthesisVoice | null {
+    const englishVoices = this.getEnglishVoices();
+    if (!englishVoices.length) return null;
+
+    // SpeechSynthesisVoice has no gender field, so browser voice names are the best signal.
+    const genderGroups = (['male', 'female'] as const)
+      .map((gender) => ({
+        gender,
+        voices: englishVoices.filter((voice) => this.detectVoiceGender(voice) === gender),
+      }))
+      .filter((group) => group.voices.length);
+    const selectedGroup = genderGroups[Math.floor(Math.random() * genderGroups.length)];
+    const candidates = selectedGroup?.voices ?? englishVoices;
+    const voicesWithoutCurrent = candidates.filter((voice) => voice !== this.selectedVoice);
+    const voicePool = voicesWithoutCurrent.length ? voicesWithoutCurrent : candidates;
+    const voice = voicePool[Math.floor(Math.random() * voicePool.length)];
+
+    this.selectedVoice = voice;
+    return voice;
+  }
+
+  private getEnglishVoices(): SpeechSynthesisVoice[] {
+    return this.voices.filter((voice) => voice.lang.toLowerCase().startsWith('en'));
+  }
+
+  private detectVoiceGender(voice: SpeechSynthesisVoice): VoiceGender {
+    if (FEMALE_VOICE_PATTERN.test(voice.name)) return 'female';
+    if (MALE_VOICE_PATTERN.test(voice.name)) return 'male';
+    return 'unknown';
+  }
+
   private selectEnglishVoice(): SpeechSynthesisVoice | null {
-    const englishVoices = this.voices.filter((voice) => voice.lang.toLowerCase().startsWith('en'));
+    const englishVoices = this.getEnglishVoices();
 
     return (
       englishVoices.find((voice) => /google us english/i.test(voice.name)) ??
@@ -496,19 +553,5 @@ export class StudyLessonDialogComponent implements OnInit, OnDestroy {
     if (this.hasShownSpeechError) return;
     this.hasShownSpeechError = true;
     this.toast.error('Trình duyệt không hỗ trợ đọc văn bản bằng giọng nói.');
-  }
-
-  private updateSentenceWords(): void {
-    const line = this.currentLessonLine;
-    this.sentenceWords = line
-      ? line.content
-          .replace(/[.!?,]/g, '')
-          .split(/\s+/)
-          .filter(Boolean)
-      : [];
-  }
-
-  private updateTranslation(): void {
-    this.vietnameseTranslation = '';
   }
 }

@@ -39,15 +39,6 @@
   font-weight: 800;
 }
 
-.badge-count {
-  padding: 2px 10px;
-  border-radius: 999px;
-  background: #eef7ea;
-  color: #6a926a;
-  font-size: 12px;
-  font-weight: 700;
-}
-
 /* ── TABS ── */
 .study-tabs {
   display: inline-flex;
@@ -155,19 +146,30 @@
   }
 }
 
-.audio-player__speed {
-  min-width: 32px;
-  height: 24px;
-  border: 1.5px solid #4a6a50;
+.playback-speed-select {
+  min-width: 74px;
+  height: 32px;
+  padding: 0 28px 0 10px;
+  border: 1px solid #4a6a50;
   border-radius: 8px;
-  background: transparent;
-  color: #a3c7a3;
+  outline: none;
+  background: #293a30;
+  color: #c6dfc8;
+  font: inherit;
   font-size: 12px;
   font-weight: 800;
   cursor: pointer;
-  &:hover {
-    border-color: #2fa557;
-    color: #4dd67a;
+  flex-shrink: 0;
+
+  &:hover,
+  &:focus-visible {
+    border-color: #4dd67a;
+  }
+
+  &--light {
+    border-color: #b8d8bc;
+    background: #fff;
+    color: #276b38;
   }
 }
 
@@ -242,13 +244,6 @@
       background: #fff2f2;
     }
   }
-  &--sm {
-    width: 28px;
-    height: 28px;
-    tui-icon {
-      font-size: 13px;
-    }
-  }
 }
 
 /* ── Link btn ── */
@@ -283,10 +278,6 @@
   &--correct {
     background: #e8fce8;
     border: 1.5px solid #a8e6c3;
-  }
-  &--wrong {
-    background: #fef2f0;
-    border: 1.5px solid #f5c4c0;
   }
 }
 
@@ -324,48 +315,38 @@
   }
 }
 
-.btn-retry {
-  display: inline-flex;
+.answer-feedback {
+  padding: 14px 16px 18px;
+  border-radius: 4px;
+  background: #292e33;
+  color: #c5cbd1;
+  animation: fadeSlideUp 0.25s ease-out;
+}
+
+.answer-feedback__status {
+  display: flex;
   align-items: center;
+  gap: 8px;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.answer-feedback__warning {
+  color: #ffd43b;
+}
+
+.answer-feedback__sentence {
+  display: flex;
+  flex-wrap: wrap;
   gap: 6px;
-  padding: 8px 18px;
-  border: 1.5px solid #f5c4c0;
-  border-radius: 12px;
-  background: #fff;
-  color: #a83232;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  &:hover {
-    background: #fef2f0;
-  }
+  margin: 12px 0 0;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.35;
 }
 
-.section-label {
-  font-size: 11px;
-  font-weight: 900;
-  color: #6a926a;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-/* ── Word chips ── */
-.word-chip {
-  padding: 6px 14px;
-  border: 1.5px solid #d8efd8;
-  border-radius: 10px;
-  background: #fff;
-  color: #18351d;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.15s;
-  &:hover {
-    background: #eef7ea;
-    border-color: #2fa557;
-    color: #1d8b48;
-    box-shadow: 0 2px 6px rgba(30, 128, 68, 0.12);
-  }
+.answer-feedback__word--correct {
+  color: #23c875;
 }
 
 /* ═══ TRANSCRIPT PANEL ═══ */
@@ -529,6 +510,8 @@
 }
 
 .transcript-list {
+  display: flex;
+  flex-direction: column;
   height: 100%;
   min-height: 0;
   overflow-y: auto;
@@ -537,32 +520,31 @@
   background: #fff;
 }
 
-.lang-toggle {
-  padding: 4px 14px;
-  border: 1.5px solid #d8efd8;
-  border-radius: 10px;
-  background: #fff;
-  color: #2fa557;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  &:hover {
-    background: #eef7ea;
-  }
-}
-
 .transcript-item {
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
   width: 100%;
+  min-height: 58px;
+  block-size: auto;
+  flex-shrink: 0;
   padding: 12px 20px;
   border: none;
   border-left: 3px solid transparent;
+  border-radius: 0;
   background: transparent;
   text-align: left;
+  white-space: normal;
+  overflow: visible;
   cursor: pointer;
-  transition: all 0.15s;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
+
+  > div {
+    min-width: 0;
+  }
 
   &:hover {
     background: #f0faea;
@@ -586,7 +568,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-top: 2px;
   tui-icon {
     font-size: 14px;
     color: #5a8a5a;
@@ -598,10 +579,13 @@
 
 .transcript-item__en {
   margin: 0;
+  width: 100%;
   font-size: 14px;
   font-weight: 700;
   color: #2a4a2e;
   line-height: 1.4;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 /* ── ANIMATIONS ── */
